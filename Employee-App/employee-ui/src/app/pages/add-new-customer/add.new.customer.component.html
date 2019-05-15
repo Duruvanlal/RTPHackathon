@@ -1,0 +1,70 @@
+
+<div class="back-white box-shadow" id="add-new-cust">
+    <div class="row">
+        <div class="col-12">
+            <div class="card-header transparent border-0 text-muted">
+                <h5 class="mb-0">Add New Customer</h5>    
+            </div>
+        </div>
+    </div><br>
+    <div class="row">
+        <div class="col-6">
+            <mat-form-field>
+                <input matInput placeholder="Customer Name" name="name" [(ngModel)]="customer.name">
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <mat-form-field>
+                <input matInput placeholder="Address 1" name="address1" [(ngModel)]="customer.address1">
+            </mat-form-field>
+        </div>
+        <div class="col-6">
+            <mat-form-field>
+                <input matInput placeholder="Address 2" name="address2" [(ngModel)]="customer.address2">
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="row">
+                <div class="col-8">
+                    <mat-form-field>
+                        <input matInput placeholder="City" name="city" [(ngModel)]="customer.city">
+                    </mat-form-field>
+                </div>
+                <div class="col-4">
+                    <mat-form-field>
+                        <input matInput placeholder="Postal Code" name="postalCode" [(ngModel)]="customer.postalCode">
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <mat-form-field>
+                <input matInput placeholder="State" name="state" [(ngModel)]="customer.state">
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <mat-form-field>
+                <input matInput placeholder="Country" name="country" [(ngModel)]="customer.country">
+            </mat-form-field>
+        </div>
+        <div class="col-6">
+            <mat-form-field>
+                <input matInput placeholder="Currency" name="ccy" [(ngModel)]="customer.ccy">
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="row align-bottom">
+        <div class="col-12 text-center">
+            <button type="button" class="btn btn-primary w-100p mb-1 mr-1">Submit</button>
+            <button type="button" class="btn btn-secondary w-100p mb-1 mr-1" routerLink="../../customers">Cancel</button>
+
+        </div>
+    </div>
+</div>
+

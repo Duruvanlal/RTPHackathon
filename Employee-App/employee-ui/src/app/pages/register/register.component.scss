@@ -1,0 +1,15 @@
+.register-container{
+    position: absolute;
+    margin-top:80px;
+    .card{
+        .card-header{
+            width: 100%;
+            height: 100%;
+            background-color:#efefef;
+        }
+    }
+}
+
+.brd{
+    border:2px solid #efefef;
+}

@@ -1,0 +1,26 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.swapstech.hackathon.employee</groupId>
+    <artifactId>hackathon-rtp-employee</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0</version>
+    <name>RTP Hackathon Employee App Parent</name>
+	<modules>
+		<module>employee-ui</module>
+        <module>employee-service</module>
+    </modules>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>
