@@ -66,6 +66,7 @@ import { GlobalProperty } from '../global';
     MatTabsModule,
     MatFormFieldModule,
     MatSelectModule,
+    MatSelectModule,
     MatRadioModule,
     MatTableModule ,
     MatPaginatorModule,

@@ -2,7 +2,7 @@
 
 export class User {
     id:Number;
-    userId:String;
+    userName:String;
     firstName:String;
     lastName:String;
     password:String;

@@ -1,4 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { GlobalProperty } from '../../../../global';
+
 
 @Component({
   selector: 'app-user-menu',
@@ -8,9 +10,23 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 })
 export class UserMenuComponent implements OnInit {
 
-  constructor() { }
+
+  public user:any;
+
+
+  constructor(
+        private global:GlobalProperty,
+
+    ) { }
 
   ngOnInit() {
+    this.user = JSON.parse(this.global.principal);
+    console.log("this.user = ",this.user);
   }
+
+
+
+
+
 
 }

@@ -1,4 +1,4 @@
-package com.swapstech.hackathon.employee.model;
+package com.swapstech.hackathon.common.model;
 
 import java.util.List;
 
@@ -16,13 +16,16 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "ENTITY")
+@Table(name = "ENTITY_MSTR")
 public class Company {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", nullable=false)
 	private Long id;
+	
+	@Column(name="ENTITY_ID")
+	private String companyId;
 	
 	@Column(name = "ENTITY_NM")
 	private String name;
@@ -32,13 +35,15 @@ public class Company {
 	private String type;
 	
 	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id", referencedColumnName = "id")
+    @JoinColumn(name = "ADDRESS_ID", referencedColumnName = "id")
 	private Address address;
 	
 	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
 	@JsonIgnore
 	private List<User> users;
-
+	
+	
+	
 	public Long getId() {
 		return id;
 	}
@@ -86,6 +91,16 @@ public class Company {
 	public void setUsers(List<User> users) {
 		this.users = users;
 	}
+
+	public String getCompanyId() {
+		return companyId;
+	}
+
+	public void setCompanyId(String companyId) {
+		this.companyId = companyId;
+	}
+	
+	
 	
 	
 	

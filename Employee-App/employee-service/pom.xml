@@ -117,6 +117,12 @@
 			<version>2.8.0</version>
 			<scope>compile</scope>
 		</dependency>
+		<!--  RTP SERVICE -->
+		<dependency>
+			<groupId>com.swapstech.hackathon</groupId>
+			<artifactId>rtp-common</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

@@ -16,7 +16,7 @@ export const routes: Routes = [
     path: 'pages', 
     component: PagesComponent,
     children:[
-          { path: '', redirectTo: 'invoices', pathMatch: 'full' },
+          { path: '', redirectTo: 'accounts', pathMatch: 'full' },
           { path: 'accounts', component:  AccountsComponent},
           { path: 'invoices', component: InvoicesComponent},
           { path: 'send/invoice', component:  NewInvoiceComponent},
