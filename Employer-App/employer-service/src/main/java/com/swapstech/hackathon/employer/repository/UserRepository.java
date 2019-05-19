@@ -4,10 +4,13 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.swapstech.hackathon.employer.model.Company;
 import com.swapstech.hackathon.employer.model.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 	
-	List<User> findAllUserByUserIdAndPassword(String loginId, String password);
+	List<User> findAllUserByUserNameAndPassword(String loginId, String password);
+	User findOneByFirstNameAndLastNameAndUserName(String firstName,String lastName,String userName);
+	List<User> findAllUsersByCompanyId(Long company);
 	
 }
