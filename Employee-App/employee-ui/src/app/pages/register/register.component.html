@@ -5,82 +5,10 @@
                 <img src="http://www.swapstech.com/images/Header/logo.png" alt="Logo">
             </div>
             <div class="card-body text-center pb-1 brd">
-                <h4>Register Entity</h4>
+                <h4>Register User</h4>
                 <a routerLink="/login" class="transition">Already have an account? Sign in!</a>
                 <form class="form-horizontal" #form="ngForm" novalidate name="form">
-                <div class="row">
-                    <div class="col-6">
-                        <mat-form-field>
-                            <input placeholder="Company Name" name="companyName"
-                                matInput
-                                required
-                                [(ngModel)]="user.company.name"> 
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        <mat-form-field>
-                            <input placeholder="Address 1" name="companyAddress1"
-                                matInput
-                                required
-                                [(ngModel)]="user.company.address.address1"> 
-                        </mat-form-field>
-                    </div>
-                    <div class="col-6">
-                        <mat-form-field>
-                            <input placeholder="Address 2" name="companyAddress2"
-                                matInput
-                                [(ngModel)]="user.company.address.address2"> 
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        <div class="row">
-                            <div class="col-8">
-                                <mat-form-field>
-                                    <input placeholder="City" name="companyCity"
-                                        matInput
-                                        required
-                                        [(ngModel)]="user.company.address.city"> 
-                                </mat-form-field>
-                            </div>
-                            <div class="col-4">
-                                <mat-form-field>
-                                    <input placeholder="Postal Code" name="companyPostalCode"
-                                        matInput
-                                        required
-                                        [(ngModel)]="user.company.address.postalCode"> 
-                                </mat-form-field>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <mat-form-field>
-                            <input placeholder="State" name="companyState"
-                                matInput
-                                required
-                                [(ngModel)]="user.company.address.state"> 
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        <mat-form-field>
-                            <input placeholder="Country" name="companyCountry"
-                                matInput
-                                required
-                                [(ngModel)]="user.company.address.country"> 
-                        </mat-form-field>
-                    </div>
-                </div>
-                <hr>
-                <div class="row">
-                    <div class="col-12">
-                        <h5>User Information</h5>    
-                    </div>
-                </div>
+               
                 <div class="row">
                     <div class="col-6">
                         <mat-form-field>
@@ -143,13 +71,7 @@
                         </mat-form-field>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col text-left">
-                        <mat-checkbox name="addressSameAsCompany" [(ngModel)]="addressSameAsCompany">Address same as Company !</mat-checkbox>
-                    </div>
-                </div>
                 <!-- USER ADDRESS -->
-                <div *ngIf="!addressSameAsCompany">
                 <div class="row">
                     <div class="col-6">
                         <mat-form-field>
@@ -206,7 +128,6 @@
                                 [(ngModel)]="user.address.country"> 
                         </mat-form-field>
                     </div>
-                </div>
                 </div>
                 <!-- Register Button -->
                 <div class="row">
