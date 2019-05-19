@@ -8,7 +8,7 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
-import { MatSliderModule,MatFormFieldModule,MatSlideToggleModule,MatIconModule,MatDatepickerModule,MatNativeDateModule, MatInputModule,MatTabsModule,MatSelectModule,MatRadioModule,MatTableModule,MatPaginatorModule,MatAutocompleteModule } from '@angular/material';
+import { MatSliderModule,MatDialogModule,MatFormFieldModule,MatSlideToggleModule,MatIconModule,MatDatepickerModule,MatNativeDateModule, MatInputModule,MatTabsModule,MatSelectModule,MatRadioModule,MatTableModule,MatPaginatorModule,MatAutocompleteModule } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { HeaderComponent } from './theme/components/header/header.component';
 import { FooterComponent } from './theme/components/footer/footer.component';
@@ -31,6 +31,8 @@ import { FormsModule , ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { GlobalProperty } from '../global';
 import { EmployeeComponent } from './pages/employee/employee.component';
+import { AddNewEmployeeDialog } from './pages/employee/employee.component';
+
 
 @NgModule({
   declarations: [
@@ -49,7 +51,8 @@ import { EmployeeComponent } from './pages/employee/employee.component';
     NewInvoiceComponent,
     CustomersComponent,
     NewCustomerComponent,
-    EmployeeComponent
+    EmployeeComponent,
+    AddNewEmployeeDialog
   ],
   imports: [
     CommonModule,
@@ -63,10 +66,12 @@ import { EmployeeComponent } from './pages/employee/employee.component';
     MatSlideToggleModule,
     ToastrModule.forRoot(), 
     MatIconModule,
+    MatDatepickerModule,
     MatInputModule,
     MatTabsModule,
     MatFormFieldModule,
     MatSelectModule,
+    MatDialogModule,
     MatRadioModule,
     MatTableModule ,
     MatPaginatorModule,
@@ -79,6 +84,7 @@ import { EmployeeComponent } from './pages/employee/employee.component';
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
     }, GlobalProperty ],
+    entryComponents:[AddNewEmployeeDialog],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

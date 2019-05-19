@@ -17,4 +17,8 @@ export class UserService {
     return this.http.post(this.global.url+"login",_user);
   }
 
+  public findAllUsers(_companyId) {
+    return this.http.get(this.global.url+"user/"+_companyId);
+  }
+
 }

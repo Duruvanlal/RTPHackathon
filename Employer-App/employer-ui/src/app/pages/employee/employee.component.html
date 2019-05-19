@@ -1,2 +1,40 @@
 
-<p>Blank Component</p>
+<div>
+    <div class="row box-shadow">
+        <div class="col text-right add-new-account-div">
+            <div class="row">
+                <div class="col-6 text-left">
+                    <h6 class="lbl">All Active Contractor</h6>
+                </div>
+                <div class="col-6 text-right">
+                    <button type="button" class="btn btn-primary" (click)="openDialog()">Add New Contractor</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row box-shadow background-fff">
+        <div class="col">
+            <table class="table">
+                <tr>
+                    <th>FirstName</th>
+                    <th>LastName</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                </tr>
+                <tr *ngFor="let row of contractorList">
+                    <td>{{row.firstName}}</td>
+                    <td>{{row.lastName}}</td>
+                    <td>{{row.startDate | date }}</td>
+                    <td>{{row.endDate | date }}</td>
+                    <td>{{row.email}}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm">Terminate</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
