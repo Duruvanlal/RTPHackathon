@@ -14,8 +14,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 //@EnableCasClient
 //@EnableGlobalMethodSecurity(prePostEnabled = true)
 //@EnableAsync(proxyTargetClass=true)
-@EnableJpaRepositories("com.swapstech.hackathon.employee.repository")
-@ComponentScan({"com.swapstech.hackathon.employee.config","com.swapstech.hackathon.employee.rest","com.swapstech.hackathon.employee.service"})
+@EnableJpaRepositories("com.swapstech.hackathon.common.repository")
+@ComponentScan({"com.swapstech.hackathon"})
 public class Application {
 	
 	public static void main(String[] args) {
