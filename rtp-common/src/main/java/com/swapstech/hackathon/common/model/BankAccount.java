@@ -1,4 +1,4 @@
-package com.swapstech.hackathon.employee.model;
+package com.swapstech.hackathon.common.model;
 
 import java.util.Date;
 

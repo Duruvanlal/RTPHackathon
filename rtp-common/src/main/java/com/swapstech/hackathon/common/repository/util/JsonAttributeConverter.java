@@ -1,4 +1,4 @@
-package com.swapstech.hackathon.employee.repository.util;
+package com.swapstech.hackathon.common.repository.util;
 
 import java.util.Map;
 

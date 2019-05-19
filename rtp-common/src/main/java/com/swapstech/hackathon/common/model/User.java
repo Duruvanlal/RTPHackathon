@@ -1,4 +1,7 @@
-package com.swapstech.hackathon.employee.model;
+package com.swapstech.hackathon.common.model;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,13 +14,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "USER")
@@ -28,26 +30,32 @@ public class User {
 	@Column(name = "ID", nullable=false)
 	private Long id;
 	
-	@Column(name = "USER_ID")
+	@Column(name="USER_ID")
 	private String userId;
 	
-	@Column(name = "FIRSTNAME")
+	@Column(name = "USER_NM")
+	private String userName;
+	
+	@Column(name = "FIRST_NM")
 	private String firstName;
 	
-	@Column(name = "LASTNAME")
+	@Column(name = "MIDDLE_NM")
+	private String middleName;
+
+	@Column(name = "LAST_NM")
 	private String lastName;
-	
-	@Column(name = "PASSWORD")
+
+	@Column(name = "PASSWD")
 	private String password;
 	
 	@Column(name = "USER_TYPE")
 	@Enumerated(EnumType.STRING)
 	private UserType type = UserType.Employee;
 	
-	@Column(name = "PHONE_NUMBER")
+	@Column(name = "PHONE_NBR")
 	private String phone;
 	
-	@Column(name = "EMAIL_ADDRESS")
+	@Column(name = "EMAIL_ADDR")
 	private String email;
 	
 	@Column(name = "STATUS")
@@ -60,13 +68,30 @@ public class User {
 	private String updatedBy;
 
 	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id", referencedColumnName = "id")
+    @JoinColumn(name = "ADDESS_ID", referencedColumnName = "id")
 	private Address address;
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "company_id", nullable = true)
+    @JoinColumn(name = "ENTITY_ID", nullable = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Company company;
+	
+	
+	/* @ManyToMany
+	    @JoinTable(name="USER_ENTITY",
+	        joinColumns=
+	            @JoinColumn(name="ENTITY_ID", referencedColumnName="ID"),
+	        inverseJoinColumns=
+	            @JoinColumn(name="USER_ID", referencedColumnName="ID")
+	        )
+	 public List<Company> companies;*/
+	
+	
+	
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "USER_TIMESHEET_ID")
+	private List<Contractor> contractorList = new ArrayList<>();
+	
 	
 	public Long getId() {
 		return id;
@@ -170,6 +195,30 @@ public class User {
 
 	public void setCompany(Company company) {
 		this.company = company;
+	}
+
+	public String getMiddleName() {
+		return middleName;
+	}
+
+	public void setMiddleName(String middleName) {
+		this.middleName = middleName;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public List<Contractor> getContractorList() {
+		return contractorList;
+	}
+
+	public void setContractorList(List<Contractor> contractorList) {
+		this.contractorList = contractorList;
 	}
 	
 	

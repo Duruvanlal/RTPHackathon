@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "ADDRESS")
+@Table(name = "ADDRESS_MSTR")
 public class Address {
 	
 	@Id
@@ -19,10 +19,13 @@ public class Address {
 	@Column(name = "ID", nullable=false)
 	private Long id;
 	
-	@Column(name = "ADDRESS1")
+	@Column(name="ADDRESS_ID")
+	private String addressId;
+	
+	@Column(name = "ADDRESS_1")
 	private String address1;
 	
-	@Column(name = "ADDRESS2")
+	@Column(name = "ADDRESS_2")
 	private String address2;
 	
 	@Column(name = "CITY")
@@ -34,12 +37,15 @@ public class Address {
 	@Column(name = "COUNTRY")
 	private String country;
 	
-	@Column(name = "POSTALCODE")
+	@Column(name = "ZIPCODE")
 	private String postalCode;
 	
 	@OneToOne(mappedBy = "address")
 	@JsonIgnore
     private User user;
+	
+	
+	
 	
 	public Long getId() {
 		return id;
@@ -103,6 +109,16 @@ public class Address {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+
+	public String getAddressId() {
+		return addressId;
+	}
+
+
+	public void setAddressId(String addressId) {
+		this.addressId = addressId;
 	}
 	
 	

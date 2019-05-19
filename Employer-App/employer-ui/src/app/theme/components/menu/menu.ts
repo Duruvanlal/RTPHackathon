@@ -6,10 +6,9 @@ import { Menu } from './menu.model';
 
 export const verticalMenuItems = [ 
     new Menu (4, 'Accounts', '/pages/accounts', null, 'bank', null, false, 0),
-    new Menu (1, 'Employee', '/pages/employee', null, 'bank', null, false, 0),
-    new Menu (1, 'Timesheets', null, null, 'bank', null, true, 0),
-    new Menu (2, 'Enter Timesheet', '/pages/invoices', null, 'bank', null, false, 1),
-    new Menu (3, 'View Timesheet', '/pages/customers', null, 'bank', null, false, 1),
+    new Menu (1, 'Contractor', '/pages/employee', null, 'bank', null, false, 0),
+    new Menu (2, 'Timesheets', null, null, 'bank', null, true, 0),
+    new Menu (3, 'View Timesheet', '/pages/customers', null, 'bank', null, false, 2),
     
     
 ]

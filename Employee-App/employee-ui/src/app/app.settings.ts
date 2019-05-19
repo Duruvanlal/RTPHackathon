@@ -4,7 +4,7 @@ import { Settings } from './app.settings.model';
 @Injectable()
 export class AppSettings {
     public settings = new Settings(
-        'Zillpay App',
+        'Contractors App',
         'Hackathon Zillpay App - description',
         {
             menu: 'vertical', //horizontal , vertical
