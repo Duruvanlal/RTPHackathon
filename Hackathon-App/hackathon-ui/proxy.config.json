@@ -1,0 +1,26 @@
+{
+    "/token": {
+    "target": "http://localhost:4000",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+    },
+    "/accounts": {
+      "target": "https://sandbox.api.yodlee.com/ysl",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+      },
+    "/payment": {
+      "target": "https://galaxy.swapstech.net",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+      },
+      "/pricing": {
+      "target": "https://galaxy.swapstech.net",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+      }
+}

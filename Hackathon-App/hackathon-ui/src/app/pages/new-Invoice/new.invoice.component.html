@@ -1,0 +1,230 @@
+   <div class="right-invoice">
+    <section id="memo">
+      <div class="company-info">
+        <div class="row">
+          <div class="col">
+              Sender
+              <h4 class="text-primary" style="font-weight: bold;text-transform: uppercase;">
+                {{currentUser.firstName}} {{currentUser.lastName}}</h4>
+            <!--  <mat-form-field >
+                  <mat-label>Sender</mat-label>
+                  <input type="text" [(ngModel)]= "invoiceMaster.sellerUserId" required matInput disabled/> 
+                </mat-form-field>  -->
+          </div>
+        </div>
+        <div class="text-brown"> {{currentUser.address1}} </div>
+        <div class="text-brown"> {{currentUser.city}}, {{currentUser.postalCode}} </div>
+        <div class="text-brown"> {{currentUser.state}} </div>
+        <div class="text-brown">{{currentUser.country}}</div> 
+        
+      </div>
+
+      <div class="" style="float: right;">
+          <img alt="Member Logo" class="member-logo ng-star-inserted" src="http://www.swapstech.com/images/Header/logo.png">
+      </div>
+    </section>
+<div class="row">
+  <div class="col-md-6">
+      <section id="invoice-title-number">
+
+          <div class="title-top">
+            <span> 
+                <mat-form-field >
+                    <input required (dateInput)="calculateDueDate()" [(ngModel)]="invoiceMaster.inventoryDueDateTime"
+                    matInput [matDatepicker]="picker" placeholder="Due Date">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>  
+                  <mat-form-field >
+                      <input required [(ngModel)]="invoiceMaster.poNumber"
+                      matInput placeholder="PO Number">
+                    </mat-form-field>  
+            </span> 
+          </div>
+        
+          <div id="title"> INVOICE <small>- 4568</small> </div>
+          
+        </section>
+  </div>
+  <div class="col-md-4  offset-md-2 mt-5">
+      <section id="">
+          <div class="">
+              <ng-select  [items]="userPmtAccountList" [multiple]="false" [clearable]="false"
+              bindLabel="upaCD" bindValue="userId" 
+              (change)="selectReceiver($event)"
+               placeholder="Search Receiver">
+            </ng-select>
+        <!--    <span> 
+                <mat-form-field >
+                    <mat-label>Receiver</mat-label>
+                    <mat-select required (selectionChange)="selectReceiver($event)">
+                      <mat-option *ngFor="let row of userPmtAccountList" [value]="row">
+                        {{row.userName}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>  
+            </span> -->
+          </div>
+          <h4 class="text-primary" style="font-weight: bold;text-transform: uppercase;">
+              {{receiver.firstName}} {{receiver.lastName}}</h4>
+          <div class="text-brown"> {{receiver.address1}} </div>
+            <div class="text-brown"> {{receiver.city}}, {{receiver.postalCode}} </div>
+            <div class="text-brown"> {{receiver.state}} </div>
+            <div class="text-brown">{{receiver.country}}</div> 
+            
+        </section>
+  </div>
+</div>
+  
+
+    
+    
+    <div class="clearfix"></div>
+    
+    <section id="invoice-info">
+     <!-- <div>
+        <span> net_term_label </span> <span> net_term </span>
+      </div>
+    <div>
+        <span> due_date_label </span> <span> {{dueDate}} </span>
+      </div>
+      <div>
+        <span> po_number_label </span> <span> 101 </span>
+      </div> -->
+      
+    </section> 
+    
+    <div class="clearfix"></div>
+
+    <!--<div class="currency">
+      <span> Currency </span> <span> USD </span>
+    </div> -->
+    
+    
+    <section id="items">
+      <table class="table table-striped table-responsive">          
+        <tr>
+        <!--  <th> # </th> -->
+          <th> Item Name </th>
+          <th> Description </th>
+          <th> Quantity </th>
+          <th> Price </th>
+          <th> Item Total </th>
+          <th> Action </th>
+        </tr>
+        <tr data-iterate="item">
+         <!--   <td> </td> -->
+            <td> <!-- Name -->
+              <mat-form-field>
+                <input matInput placeholder="Product Name" 
+                [(ngModel)]="invoiceRow.productName">
+              </mat-form-field>  
+            </td>
+            <td> <!-- DESCRIPTION -->
+              <mat-form-field>
+                <input matInput placeholder="Product Desc" 
+                [(ngModel)]="invoiceRow.productDesc">
+              </mat-form-field>  
+            </td>
+            <td> <!-- QUANTITY -->
+              <mat-form-field>
+                <input matInput type="number" placeholder="Quantity" 
+                [(ngModel)]="invoiceRow.productQty">
+              </mat-form-field>  
+            </td>
+            <td><!-- PRICE -->
+              <mat-form-field>
+                <input matInput type="number" placeholder="Price" 
+                [(ngModel)]="invoiceRow.unitPrice">
+              </mat-form-field>  
+            </td>
+            <td> 
+              <mat-form-field>
+                <input matInput placeholder="Total"  [(ngModel)]="invoiceRow.totalAmount" disabled>
+              </mat-form-field>    
+            </td>
+            <td>
+              <button title="Add" (click)="addTableRow()" class="btn btn-primary pull-right mr-2">
+                <i class="fa fa-plus" style="font-size:18px;"></i>
+              </button>
+            </td>
+          </tr>
+        <tr *ngFor="let row of invoiceTable; let i = index">
+     <!--     <td>{{ i+1 }} </td> -->
+          <td>{{row.productName}}</td>
+          <td> {{row.productDesc}} </td>
+          <td> {{row.productQty}} </td>
+          <td> {{row.unitPrice}} </td>
+          <td> {{row.totalAmount}} </td>
+          <td><button title="Cancel" (click)="removeTableRow(row)" class="btn btn-danger pull-right mr-2">
+            <i class="fa fa-trash" style="font-size:18px;"></i>
+          </button></td>
+        </tr>       
+      </table>
+    </section>
+    <!--<button title="Cancel"  class="btn btn-danger pull-right mr-2">
+            <i class="fa fa-trash" style="font-size:18px;"></i>
+          </button> -->  
+    
+    
+    <section id="sums">
+    
+      <table cellpadding="0" cellspacing="0">
+       
+        
+       <!-- 
+         
+         <tr>
+          <th> Amount Sub Total </th>
+          <td> {{amountSubTotal}} </td>
+        </tr>
+        <tr data-iterate="tax">
+          <th> Tax (-) </th>
+          <td> {{taxAmount}} </td>
+        </tr>
+
+        <tr data-iterate="tax">
+          <th> Discount (-) </th>
+          <td> {{discountAmount}} </td>
+        </tr> -->
+        
+        <tr class="amount-total">
+          <button type="button"  (click)="sendInvoice()"
+          class="mt-2 btn btn-success mb-1 mr-1">Submit Invoice</button>
+
+          <td colspan="2"> $ {{amountSubTotal}} </td>
+        </tr>
+        
+        <!-- You can use attribute data-hide-on-quote="true" to hide specific information on quotes.
+             For example Invoicebus doesn't need amount paid and amount due on quotes  -->
+      <!--  <tr data-hide-on-quote="true">
+          <th> amount_paid_label </th>
+          <td> amount_paid </td>
+        </tr>
+        
+        <tr data-hide-on-quote="true" class="due-amount">
+          <th> amount_due_label </th>
+          <td> amount_due </td>
+        </tr> -->
+        
+      </table>
+      
+    </section>
+    
+    <div class="clearfix"></div>
+    
+ <!--   <section id="terms">
+    
+      <span> terms_label </span>
+      <div> terms </div>
+      
+    </section>
+
+    <div class="payment-info">
+      <div> payment_info1 </div>
+      <div> payment_info2 </div>
+      <div> payment_info3 </div>
+      <div> payment_info4 </div>
+      <div> payment_info5 </div>
+    </div> -->
+  </div>

@@ -1,0 +1,40 @@
+<div class="d-flex justify-content-center align-items-center w-100 h-100 login-container">
+    <div class="col-xl-4 col-md-6 col-10">
+        <div class="card border-0 box-shadow rounded-0">
+            <div class="card-header d-flex justify-content-center align-items-center border-0 box-shadow" id="login-icon">
+                <img src="http://www.swapstech.com/images/Header/logo.png" alt="Logo">
+            </div>
+            <div class="card-body text-center pb-1" id="login-box">
+                <h2>Contractor login</h2>
+                <a routerLink="/register" class="transition">Don't have an account? Sign up now!</a>
+                <form class="text-left mt-4" #form="ngForm" novalidate name="form">
+                    <div class="form-group">
+                        <mat-form-field>
+                            <input placeholder="User Id" name="userId"
+                                matInput
+                                required
+                                [(ngModel)]="user.userName"> 
+                        </mat-form-field>     
+                    </div>
+                    <div class="form-group">
+                        <mat-form-field>
+                            <input placeholder="Password" name="password" type="password"
+                                matInput
+                                required
+                                [(ngModel)]="user.password"> 
+                        </mat-form-field> 
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-block" id="login-btn" type="submit" (click)="login(form)">Sign in</button>
+                    </div>
+                    <div class="form-group text-center alert alert-danger alert-dismissible fade show" *ngIf="showError">
+                        <span>UserId Or Password did not matched.</span>
+                    </div>
+                </form>
+                <br><br><br>
+            </div>
+        </div>
+    </div>
+</div>
+
+       
