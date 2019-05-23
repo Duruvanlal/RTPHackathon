@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class AppComponent  implements OnInit {
     constructor(public appSettings:AppSettings, public router:Router){
-        
+      this.router.navigate(['/login']);
     }   
 
     ngOnInit() {        

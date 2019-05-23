@@ -57,3 +57,7 @@ export class UserPmtAccount{
     updatedDateTime: any;
 }
 
+export class Token{
+    jwtToken : any;
+}
+

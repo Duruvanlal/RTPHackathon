@@ -47,6 +47,14 @@ export class LoginComponent {
         }
       });
     }
+
+    this.userService.getYodleeToken().subscribe(
+      (res)=>{
+        localStorage.setItem('yoddleToken', res.jwtToken);
+      },(error) =>{
+        localStorage.setItem('yoddleToken', null);
+      }
+    );
   }
 
 

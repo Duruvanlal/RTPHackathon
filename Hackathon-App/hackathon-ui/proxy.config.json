@@ -5,7 +5,7 @@
     "changeOrigin": true,
     "logLevel": "debug"
     },
-    "/accounts": {
+    "/accountssss": {
       "target": "https://sandbox.api.yodlee.com/ysl",
       "secure": false,
       "changeOrigin": true,

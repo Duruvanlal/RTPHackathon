@@ -61,7 +61,7 @@ export class PayablesComponent implements OnInit {
       { name: 'PO Number',prop:'poNumber'  },
       { name: 'Invoice Date' ,prop:'inventorySubDateTime' },
       { name: 'Due Date',prop:'inventoryDueDateTime'  },
-      { name: 'Seller Id' ,prop:'sellerUserId' },
+      { name: 'Merchant ID' ,prop:'sellerUserId' },
       { name: 'Action', cellTemplate: this.viewInvoice  }
     ];
   }

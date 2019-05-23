@@ -1,7 +1,7 @@
 import { Injectable, Renderer2 } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { GlobalProperty } from '../../global';
-import { User,UserPmtAccount } from './../models/user.mode';
+import { User,Token,UserPmtAccount } from './../models/user.mode';
 import {InvoiceMaster,InvoiceDetail} from './../models/invoice.mode';
 import { Subject, BehaviorSubject, Observable, of, concat } from 'rxjs';
 
@@ -18,6 +18,10 @@ export class UserService {
 
   public login(_user) {
     return this.http.post(this.global.url + "login", _user);
+  }
+
+  public getYodleeToken() : Observable<Token>{
+    return this.http.get<Token>(this.global.url + "token");
   }
 
   public getAllUsers(): Observable<User[]> {
@@ -38,5 +42,9 @@ export class UserService {
 
   public getPayables(buyerId): Observable<InvoiceMaster[]> {
     return this.http.get<InvoiceMaster[]>(this.global.url + "invoice/buyer/"+buyerId);
+  }
+
+  public postUserAct(data) {
+    return this.http.post(this.global.url + "user-accounts", data);
   }
 }

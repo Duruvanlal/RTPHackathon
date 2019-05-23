@@ -1,7 +1,9 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import {InvoiceMaster} from './../../models/invoice.mode';
+import { Component, OnInit, ViewEncapsulation,ViewChild, TemplateRef } from '@angular/core';
 import {User} from './../../models/user.mode';
 import {UserService} from './../../services/user.service';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+import {InvoiceMaster, InvoiceDetail} from './../../models/invoice.mode';
+
 
 @Component({
   selector: 'app-receivables',
@@ -14,6 +16,9 @@ export class ReceivablesComponent implements OnInit {
 
   invoiceMasterList : InvoiceMaster[] = []; 
   currentUser : User;
+
+  @ViewChild('viewInvoice')  viewInvoice: TemplateRef<any>;
+  @ViewChild('viewInvoiceModal') viewInvoiceModal: ModalDirective;
 
   rows= [];
   columns = [];
@@ -42,6 +47,14 @@ export class ReceivablesComponent implements OnInit {
     this.rows = temp;
   }
 
+  invoiceDetail :InvoiceDetail;
+
+  action(row){
+    this.viewInvoiceModal.show();
+    this.invoiceDetail = row.invoiceDetail;
+    console.log('invoiceDetail '+JSON.stringify(this.invoiceDetail));
+  }
+
   ngOnInit() {
 
     this.columns = [
@@ -49,7 +62,8 @@ export class ReceivablesComponent implements OnInit {
       { name: 'PO Number',prop:'poNumber'  },
       { name: 'Invoice Date' ,prop:'inventorySubDateTime' },
       { name: 'Due Date',prop:'inventoryDueDateTime'  },
-      { name: 'Buyer Id' ,prop:'buyerUserId' }
+      { name: 'Cust Id' ,prop:'buyerUserId' },
+      { name: 'Action', cellTemplate: this.viewInvoice  }
     ];
   }
 

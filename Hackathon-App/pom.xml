@@ -6,8 +6,8 @@
     <version>1.0</version>
     <name>RTP Hackathon Employee App Parent</name>
 	<modules>
-		<module>employee-ui</module>
-        <module>employee-service</module>
+		<module>hackathon-ui</module>
+        <module>hackathon-service</module>
     </modules>
     <build>
         <pluginManagement>

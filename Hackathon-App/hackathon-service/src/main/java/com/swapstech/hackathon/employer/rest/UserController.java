@@ -42,7 +42,8 @@ public class UserController {
 			principal = userRepository.findOneByUserNameAndPassword(user.getUserName(),
 					user.getPassword());
 		} catch (Exception ex) {
-			return ResponseEntity.ok(ex.getMessage());
+			System.out.println(ex.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return ResponseEntity.ok(principal);
 	}
@@ -54,9 +55,8 @@ public class UserController {
 			user.setUserId(UUID.randomUUID().toString());
 			userRepository.save(user);
 		} catch (Exception e) {
-
+			System.out.println(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-
 		}
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
@@ -83,6 +83,7 @@ public class UserController {
 			users = userRepository.findAll();
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage()); // company
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return ResponseEntity.ok(users);
 	}
@@ -106,7 +107,8 @@ public class UserController {
 			}
 			
 		} catch (Exception ex) {
-			System.out.println(ex.getMessage()); // company
+			System.out.println(ex.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return ResponseEntity.ok("Success");
 	}
@@ -119,7 +121,8 @@ public class UserController {
 		try {	
 			accounts = userPmtActRepository.findAll();
 		} catch (Exception ex) {
-			System.out.println(ex.getMessage()); // company
+			System.out.println(ex.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return ResponseEntity.ok(accounts);
 	}

@@ -17,11 +17,16 @@ b, strong, .bold {
 .right-invoice {
   background-color: #fff;
   padding: 40px 30px 40px 30px;
-  min-height: 1078px;
+  min-height: 778px;
 }
 
 #memo .company-info {
   float: left;
+  border-style: none;
+padding: 10px;
+border-color: #3e50b4;
+border-radius: 25px;
+background: aliceblue;
 }
 
 
@@ -71,7 +76,7 @@ b, strong, .bold {
   display: inline-block;
   background: #415472;
   color: white;
-  font-size: 40px;
+  font-size: 30px;
   padding: 7px;
   font-family: Sanchez, Serif;
   line-height: 1em;

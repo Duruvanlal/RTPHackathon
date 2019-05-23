@@ -8,7 +8,7 @@
 		<!-- 2.0 -->
 	</parent>
 	<groupId>com.swapstech.hackathon.employee</groupId>
-	<artifactId>employee-service</artifactId>
+	<artifactId>hackathon-service</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0</version>
 	<name>RTP Hackathon Employee App Service</name>
@@ -36,6 +36,11 @@
 			<version>2.1.0</version>
 		</dependency>
 		<!-- UI -->
+		<dependency>
+			<groupId>com.swapstech.hackathon.employee</groupId>
+			<artifactId>hackathon-ui</artifactId>
+			<version>1.0</version>
+		</dependency> 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>

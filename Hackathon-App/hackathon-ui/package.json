@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 4400 --proxy-config proxy.config.json --live-reload false",
+    "start": "ng serve --port 4400 --live-reload false",
     "build": "ng build --output-path ./target/classes/META-INF/resources",
     "test": "ng test",
     "lint": "ng lint",

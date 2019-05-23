@@ -43,7 +43,7 @@ public class HomeController {
 		String bearer=null;
 		String token=null;
 		
-		int validity=1800;
+		int validity=1000;
 		
 		try {
 			// Calling JWT util to generate the token
