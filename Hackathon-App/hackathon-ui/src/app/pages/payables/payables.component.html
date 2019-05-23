@@ -1,0 +1,58 @@
+<mat-card class="mt-3">
+    <mat-card-title> Payables</mat-card-title>
+    <div class="input-group mt-3">
+        <span class="input-group-prepend">
+            <span class="input-group-text">
+                <i class="fa fa-search"></i>
+            </span>
+        </span>
+        <input class="form-control" type="text" (keyup)="updateFilter($event)" 
+        placeholder="Search Invoice Ref / Merchant ID" />
+
+    </div>
+    <ngx-datatable class="material mt-2" [rows]="rows" 
+    [columns]="columns" [columnMode]="'force'"  [limit]="10"
+        [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'">
+    </ngx-datatable>
+    <ng-template #viewInvoice let-row="row" let-value="value">
+        <i class="fa fa-pencil fa-lg text-primary cursor-pointer" (click)="action(row)"></i>
+    </ng-template>
+</mat-card>
+
+<div bsModal #viewInvoiceModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1"
+  [config]="{backdrop: true, keyboard: false,ignoreBackdropClick:true}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header" style="display: block;">
+        <h4 id="dialog-sizes-name1" class="modal-title pull-left">Invoice</h4>
+        <button type="button" class="close pull-right" (click)="viewInvoiceModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+          <table class="table table-striped">          
+              <tr>
+                  <th> # </th>
+                <th> Item Name </th>
+                <th> Quantity </th>
+                <th> Unit Price </th>
+                <th> Amount </th>
+              </tr>
+              <tr *ngFor="let row of invoiceDetail; let i = index">
+                       <td>{{ i+1 }} </td> 
+                       <td>{{row.productName}}</td>
+                       <td> {{row.productQty}} </td>
+                       <td> {{row.unitPrice}} </td>
+                       <td> {{row.totalAmount}} </td>
+                     </tr>       
+          </table>
+        <div class="col-12 mt-3 py-1">
+          <button class="btn btn-success mr-1 w-100p"  type="button">Approve</button>
+          <button class="btn btn-danger mr-1 w-100p"  type="button">Reject</button>
+         
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
