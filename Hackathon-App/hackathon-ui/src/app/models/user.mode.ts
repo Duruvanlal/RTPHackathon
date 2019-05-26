@@ -1,5 +1,4 @@
 
-
 export class User {
     id:Number;
     userId:String;
@@ -14,18 +13,13 @@ export class User {
     status:String;
     createdBy:String;
     updatedBy:String;
-    address1:String;
-    address2:String;
-    city:String;
-    state:String;
-    country:String;
-    postalCode:String;
-    name:String;
-    entityType:String;
+    address = new Address();
+    entity = new Entity();
 }
 
 export class Address{
-    id:Number;
+    id:any;
+    addressId:any;
     address1:String;
     address2:String;
     city:String;
@@ -34,11 +28,17 @@ export class Address{
     postalCode:String;
 }
 
-export class Company{
+export class Entity{
     id:Number;
-    name:String;
-    type:String;
-    address:any = new Address();
+    entityId:any;
+    entityName:any;
+    entityDesc:any;
+    entityAddress = new Address();
+}
+
+export class UserEntity{
+    entityId:any;
+    userId:any;
 }
 
 export class UserPmtAccount{

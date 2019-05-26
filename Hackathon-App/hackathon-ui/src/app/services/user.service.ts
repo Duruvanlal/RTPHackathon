@@ -28,8 +28,12 @@ export class UserService {
     return this.http.get<User[]>(this.global.url + "users");
   }
 
-  public getAllUserAccounts(): Observable<UserPmtAccount[]> {
-    return this.http.get<UserPmtAccount[]>(this.global.url + "user-accounts");
+  public getUserAccounts(userId): Observable<UserPmtAccount[]> {
+    return this.http.get<UserPmtAccount[]>(this.global.url + "user-accounts/"+userId);
+  }
+
+  public getReceiverAccounts(userId): Observable<UserPmtAccount[]> {
+    return this.http.get<UserPmtAccount[]>(this.global.url + "receiver-user-accounts/"+userId);
   }
 
   public submitInvoice(invoice) {
@@ -46,5 +50,9 @@ export class UserService {
 
   public postUserAct(data) {
     return this.http.post(this.global.url + "user-accounts", data);
+  }
+
+  public updateUserAct(data) {
+    return this.http.put(this.global.url + "user-accounts", data);
   }
 }

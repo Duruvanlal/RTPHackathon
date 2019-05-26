@@ -1,0 +1,65 @@
+.order-card {
+    color: #fff;
+}
+
+.bg-rred{
+    background: #a8385d
+}
+
+.cursor-pointer{
+    cursor: pointer;
+}
+
+
+// .card-body .rotate {
+
+//     z-index: 8;
+//     float: right;
+//     height: 100%;
+
+// }
+
+// .card-body .rotate i {
+//     color: rgba(20, 20, 20, 0.15);
+//     position: absolute;
+//     left: 0;
+//     left: auto;
+//     right: -10px;
+//     bottom: 0;
+//     display: block;
+//     -webkit-transform: rotate(-44deg);
+//     -moz-transform: rotate(-44deg);
+//     -o-transform: rotate(-44deg);
+//     -ms-transform: rotate(-44deg);
+//     transform: rotate(-44deg);
+// }
+// .fa-4x {
+//     font-size: 4em;
+// }
+
+
+.dashboard-card {
+    border-radius: 5px;
+    -webkit-box-shadow: 0 1px 2.94px 0.06px rgba(4,26,55,0.16);
+    box-shadow: 0 1px 2.94px 0.06px rgba(4,26,55,0.16);
+    border: none;
+    margin-bottom: 30px;
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+.dashboard-card .card-block {
+    padding: 25px;
+}
+
+.order-card i {
+    font-size: 26px;
+}
+
+.f-left {
+    float: left;
+}
+
+.f-right {
+    float: right;
+}

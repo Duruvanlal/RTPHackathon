@@ -38,6 +38,9 @@ import { PayablesComponent } from './pages/payables/payables.component';
 import { ReceivablesComponent } from './pages/receivables/receivables.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ModalModule } from 'ngx-bootstrap';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { NewAccountComponent } from './pages/new-account/new-account.component';
 
 
 @NgModule({
@@ -59,6 +62,8 @@ import { ModalModule } from 'ngx-bootstrap';
     NewCustomerComponent,
     PayablesComponent,
     ReceivablesComponent,
+    DashboardComponent,
+    NewAccountComponent,
   ],
   imports: [
     CommonModule,
@@ -92,7 +97,8 @@ import { ModalModule } from 'ngx-bootstrap';
     MatDatepickerModule,
     MatNativeDateModule,
     NgxSpinnerModule,
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    NgxChartsModule
   ],
   providers: [ AppSettings,
     {

@@ -8,23 +8,35 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.swapstech.hackathon.employer.model.Address;
 //import com.swapstech.hackathon.employer.model.Address;
 //import com.swapstech.hackathon.employer.model.Company;
 import com.swapstech.hackathon.employer.model.Contractor;
+import com.swapstech.hackathon.employer.model.EntityMaster;
 import com.swapstech.hackathon.employer.model.User;
+
 import com.swapstech.hackathon.employer.model.UserPaymentAccount;
 import com.swapstech.hackathon.employer.model.UserType;
+import com.swapstech.hackathon.employer.repository.AddressRepository;
+import com.swapstech.hackathon.employer.repository.EntityRepository;
+
 import com.swapstech.hackathon.employer.repository.UserPmtActRepository;
 //import com.swapstech.hackathon.employer.repository.AddressRepository;
 //import com.swapstech.hackathon.employer.repository.CompanyRepository;
 import com.swapstech.hackathon.employer.repository.UserRepository;
+import com.swapstech.hackathon.employer.util.VOMapper;
+import com.swapstech.hackathon.employer.vo.LoginUserRequest;
+import com.swapstech.hackathon.employer.vo.UserClient;
+
 
 @RestController
 public class UserController {
@@ -33,10 +45,18 @@ public class UserController {
 	UserRepository userRepository;
 	
 	@Autowired
+	AddressRepository addressRepository;
+	
+	@Autowired
+	EntityRepository entityRepository;
+	
+	
+	
+	@Autowired
 	UserPmtActRepository userPmtActRepository;
 
 	@PostMapping(value = "login")
-	public ResponseEntity<Object> login(@RequestBody User user) {
+	public ResponseEntity<Object> login(@RequestBody LoginUserRequest user) {
 		User principal = new User();
 		try {
 			principal = userRepository.findOneByUserNameAndPassword(user.getUserName(),
@@ -49,16 +69,25 @@ public class UserController {
 	}
 
 	@PostMapping(value = "register")
-	public ResponseEntity<Void> registerEmployeeUser(@RequestBody User user) {
+	@Transactional(rollbackFor={Exception.class})
+	public ResponseEntity<Void> registerEmployeeUser(@RequestBody UserClient userClient) {
+		User user = VOMapper.convertToUserModel(userClient);
 		try {
-			user.setType(UserType.Employee);
+			user.getAddress().setAddressId(UUID.randomUUID().toString());
 			user.setUserId(UUID.randomUUID().toString());
-			userRepository.save(user);
+			user.getEntity().setEntityId(UUID.randomUUID().toString());
+//			if(user.getSameAddressAsEntity()) {
+//				user.getEntity().getAddress().setAddressId(user.getAddress().getAddressId());
+//			}else {
+				user.getEntity().getAddress().setAddressId(UUID.randomUUID().toString());
+			//}
+			User createdUser = userRepository.save(user);
+		
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<Void>(HttpStatus.OK);
+		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
 
 	// @GetMapping(value = "user/{company-id}")
@@ -77,28 +106,26 @@ public class UserController {
 	//
 
 	@GetMapping(value = "users")
-	public ResponseEntity<List<User>> findAllUsers() {
+	public List<User> findAllUsers() {
 		List<User> users = new ArrayList<User>();
 		try {
 			users = userRepository.findAll();
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage()); // company
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return null; //new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return ResponseEntity.ok(users);
+		return users;
 	}
 
 	
 	@PostMapping(value = "user-accounts")
 	public ResponseEntity<Object> saveAccounts(@RequestBody List<UserPaymentAccount> userPmtAct) {
-	//	List<UserPaymentAccount> accounts = new ArrayList<UserPaymentAccount>();
 		try {
 			
 			if(userPmtAct.size() > 0) {
 				for(UserPaymentAccount acct :userPmtAct) {
 					UserPaymentAccount isExists = userPmtActRepository.findOneByUserIdAndAccountType(acct.getUserId(), acct.getAccountType());
 					if(!(isExists!=null)) {
-						acct.setUpaCD("#"+acct.getUserId()+"_"+acct.getAccountType());
 						userPmtActRepository.save(acct);
 					}
 				}
@@ -110,16 +137,45 @@ public class UserController {
 			System.out.println(ex.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return ResponseEntity.ok("Success");
+		return ResponseEntity.ok(userPmtAct);
+	}
+	
+	@PutMapping(value = "user-accounts")
+	public ResponseEntity<Object> updateAccounts(@RequestBody UserPaymentAccount userPmtAct) {
+		try {
+			if(userPmtAct !=null) {
+				userPmtAct = userPmtActRepository.save(userPmtAct);
+			}else {
+				return (ResponseEntity<Object>) ResponseEntity.badRequest();
+			}
+			
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return ResponseEntity.ok(userPmtAct);
 	}
 	
 	
-	@GetMapping(value = "user-accounts")
-	public ResponseEntity<List<UserPaymentAccount>> getUserAccounts() {
+	@GetMapping(value = "user-accounts/{userId}")
+	public ResponseEntity<List<UserPaymentAccount>> getUserAccounts(@PathVariable ("userId") String userId) {
 	
 		List<UserPaymentAccount> accounts = new ArrayList<UserPaymentAccount>();
 		try {	
-			accounts = userPmtActRepository.findAll();
+			accounts = userPmtActRepository.findByUserId(userId);
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return ResponseEntity.ok(accounts);
+	}
+	
+	@GetMapping(value = "receiver-user-accounts/{userId}")
+	public ResponseEntity<List<UserPaymentAccount>> getReceiverUserAccounts(@PathVariable ("userId") String userId) {
+	
+		List<UserPaymentAccount> accounts = new ArrayList<UserPaymentAccount>();
+		try {	
+			accounts = userPmtActRepository.findByUserIdNotIn(userId);
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
