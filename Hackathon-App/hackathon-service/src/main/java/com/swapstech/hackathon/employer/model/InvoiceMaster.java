@@ -61,6 +61,12 @@ public class InvoiceMaster implements Serializable {
 
 	@Column(name = "SELLER_USER_ID")
 	private String sellerUserId;
+	
+	@Column(name = "BUYER_UPA_ID")
+	private String buyerUpaId;
+
+	@Column(name = "SELLER_UPA_ID")
+	private String sellerUpaId;
 
 	@Column(name = "CREATED_BY")
 	private String createdBy;
@@ -138,6 +144,22 @@ public class InvoiceMaster implements Serializable {
 
 	public void setSellerUserId(String sellerUserId) {
 		this.sellerUserId = sellerUserId;
+	}
+
+	public String getBuyerUpaId() {
+		return buyerUpaId;
+	}
+
+	public void setBuyerUpaId(String buyerUpaId) {
+		this.buyerUpaId = buyerUpaId;
+	}
+
+	public String getSellerUpaId() {
+		return sellerUpaId;
+	}
+
+	public void setSellerUpaId(String sellerUpaId) {
+		this.sellerUpaId = sellerUpaId;
 	}
 
 	public String getCreatedBy() {

@@ -1,27 +1,33 @@
    <div class="right-invoice">
-    <section id="memo">
-      <div class="company-info mat-card">
+    <section id="">
+      
         <div class="row">
-          <div class="col">
+          <div class="col-md-6 mat-card" style="background: aliceblue;">
               Sender
               <h4 class="text-primary" style="font-weight: bold;text-transform: uppercase;">
                 {{currentUser.firstName}} {{currentUser.lastName}}</h4>
+                <ng-select  [items]="userPmtAccountList" [multiple]="false" [clearable]="false"
+                bindLabel="upaCD" bindValue="userId" 
+                (change)="selectSender($event)"
+                 placeholder="Search Sender UPA">
+              </ng-select>
             <!--  <mat-form-field >
                   <mat-label>Sender</mat-label>
                   <input type="text" [(ngModel)]= "invoiceMaster.sellerUserId" required matInput disabled/> 
                 </mat-form-field>  -->
-          </div>
-        </div>
-        <div class="text-brown"> {{currentUser.address1}} </div>
-        <div class="text-brown"> {{currentUser.city}}, {{currentUser.postalCode}} </div>
-        <div class="text-brown"> {{currentUser.state}} </div>
-        <div class="text-brown">{{currentUser.country}}</div> 
+                <div class="text-brown"> {{currentUser.address.address1}} </div>
+        <div class="text-brown"> {{currentUser.address.city}}, {{currentUser.address.postalCode}} </div>
+        <div class="text-brown"> {{currentUser.address.state}} </div>
+        <div class="text-brown">{{currentUser.address.country}}</div> 
         
-      </div>
+          </div>
+      
+        
+      
 
-      <div class="" style="float: right;">
+      <div class="col-md-4 offset-md-2">
           <img alt="Member Logo" class="member-logo ng-star-inserted" src="http://www.swapstech.com/images/Header/logo.png">
-      </div>
+      </div>  </div>
     </section>
 <div class="row">
   <div class="col-md-6">
@@ -46,13 +52,13 @@
           
         </section>
   </div>
-  <div class="col-md-4  offset-md-2 mt-5" style="background: aliceblue">
+  <div class="col-md-6 mat-card  mt-5" style="background: aliceblue">
       <section id="">
           <div class="">
-              <ng-select  [items]="userPmtAccountList" [multiple]="false" [clearable]="false"
+              <ng-select  [items]="receiverPmtAccountList" [multiple]="false" [clearable]="false"
               bindLabel="upaCD" bindValue="userId" 
               (change)="selectReceiver($event)"
-               placeholder="Search Receiver">
+               placeholder="Search Receiver UPA">
             </ng-select>
         <!--    <span> 
                 <mat-form-field >
@@ -67,10 +73,10 @@
           </div>
           <h4 class="text-primary" style="font-weight: bold;text-transform: uppercase;">
               {{receiver.firstName}} {{receiver.lastName}}</h4>
-          <div class="text-brown"> {{receiver.address1}} </div>
-            <div class="text-brown"> {{receiver.city}}, {{receiver.postalCode}} </div>
-            <div class="text-brown"> {{receiver.state}} </div>
-            <div class="text-brown">{{receiver.country}}</div> 
+          <div class="text-brown"> {{receiver.address.address1}} </div>
+            <div class="text-brown"> {{receiver.address.city}}, {{receiver.address.postalCode}} </div>
+            <div class="text-brown"> {{receiver.address.state}} </div>
+            <div class="text-brown">{{receiver.address.country}}</div> 
             
         </section>
   </div>

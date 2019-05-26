@@ -5,6 +5,8 @@ export class InvoiceMaster{
     inventryTerm : any
     buyerUserId : any;
     sellerUserId : any;
+    buyerUpaId : any;
+    sellerUpaId : any;
     inventoryDueDateTime : any;
     inventorySubDateTime : any;
     createdBy : any;

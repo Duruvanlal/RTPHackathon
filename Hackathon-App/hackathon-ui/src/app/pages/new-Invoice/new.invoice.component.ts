@@ -23,6 +23,7 @@ export class NewInvoiceComponent implements OnInit {
   public user: any;
   public userList: User[] = [];
   public userPmtAccountList : UserPmtAccount[]=[];
+  public receiverPmtAccountList : UserPmtAccount[]=[];
   public sender = new User();
   public receiver = new User();
   public dueDate: any;
@@ -47,19 +48,19 @@ export class NewInvoiceComponent implements OnInit {
 
     // }
     this.getAllUsersInfo();
-    this.sender.address1 = '';
-    this.sender.address2 = '';
-    this.sender.postalCode = '';
-    this.sender.city = '';
-    this.sender.state = '';
-    this.sender.country = '';
+    this.sender.address.address1 = '';
+    this.sender.address.address2 = '';
+    this.sender.address.postalCode = '';
+    this.sender.address.city = '';
+    this.sender.address.state = '';
+    this.sender.address.country = '';
 
-    this.receiver.address1 = '';
-    this.receiver.address2 = '';
-    this.receiver.postalCode = '';
-    this.receiver.city = '';
-    this.receiver.state = '';
-    this.receiver.country = '';
+    this.receiver.address.address1 = '';
+    this.receiver.address.address2 = '';
+    this.receiver.address.postalCode = '';
+    this.receiver.address.city = '';
+    this.receiver.address.state = '';
+    this.receiver.address.country = '';
   }
 
   calculateDueDate() {
@@ -76,38 +77,41 @@ export class NewInvoiceComponent implements OnInit {
     this.userService.getAllUsers().subscribe((response) => {
       this.userList = response;
     });
+    
+    this.userService.getReceiverAccounts(this.currentUser.userName).subscribe((res) => {
+      this.receiverPmtAccountList = res;
+    });
 
-    this.userService.getAllUserAccounts().subscribe((res) => {
+    this.userService.getUserAccounts(this.currentUser.userName).subscribe((res) => {
       this.userPmtAccountList = res;
     });
   }
 
   // Update Buyer Information on dropdown change.
   public selectSender(event) {
-    this.invoiceMaster.sellerUserId = event.value.userName;
-    this.sender.userName = event.value.userName;
-    this.sender.address1 = event.value.address1;
-    this.sender.address2 = event.value.address2;
-    this.sender.postalCode = event.value.postalCode;
-    this.sender.city = event.value.city;
-    this.sender.state = event.value.state;
-    this.sender.country = event.value.country;
+    this.invoiceMaster.sellerUserId = event.userId;
+    this.invoiceMaster.sellerUpaId = event.upaCD;
+    this.sender.userName = event.userId;
   }
 
   public selectReceiver(event) {
     console.log('event.userName '+event.userName+' '+JSON.stringify(event));
     for(let user of this.userList){
+    
       if(user.userName == event.userId){
-        this.invoiceMaster.buyerUserId = user.userName;
-        this.receiver.userName = user.userName;
+      
+        this.invoiceMaster.buyerUserId = event.userId;
+        this.invoiceMaster.buyerUpaId = event.upaCD;
+        this.receiver.userName = event.userId;
         this.receiver.firstName = user.firstName;
         this.receiver.lastName = user.lastName;
-        this.receiver.address1 = user.address1;
-        this.receiver.address2 = user.address2;
-        this.receiver.postalCode = user.postalCode;
-        this.receiver.city = user.city;
-        this.receiver.state = user.state;
-        this.receiver.country = user.country;
+        this.receiver.address.address1 = user.address.address1;
+        this.receiver.address.address2 = user.address.address2;
+        this.receiver.address.postalCode = user.address.postalCode;
+        this.receiver.address.city = user.address.city;
+        this.receiver.address.state = user.address.state;
+        this.receiver.address.country = user.address.country;
+        console.log('Matched' +  this.receiver.address.address1);
       }
     }
   }

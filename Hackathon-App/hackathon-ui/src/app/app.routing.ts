@@ -8,6 +8,8 @@ import { CustomersComponent } from './pages/customers/customers.component';
 import { NewCustomerComponent } from './pages/add-new-customer/add.new.customer.component'; 
 import {PayablesComponent} from './pages/payables/payables.component';
 import {ReceivablesComponent} from './pages/receivables/receivables.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import {NewAccountComponent} from './pages/new-account/new-account.component'
 
 
 export const routes: Routes = [
@@ -18,14 +20,16 @@ export const routes: Routes = [
     path: 'pages', 
     component: PagesComponent,
     children:[
-          { path: '', redirectTo: 'receivables', pathMatch: 'full' },
+          { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
           { path: 'accounts', component:  AccountsComponent},
+          { path: 'new-account', component:  NewAccountComponent},
           { path: 'invoices', component: InvoicesComponent},
           { path: 'new/invoice', component:  NewInvoiceComponent},
           { path: 'payables', component:  PayablesComponent},
           { path: 'receivables', component:  ReceivablesComponent},
           { path: 'customers', component:  CustomersComponent},
-          { path: 'new/customer', component:  NewCustomerComponent}
+          { path: 'new/customer', component:  NewCustomerComponent},
+          { path: 'dashboard', component:  DashboardComponent},
       ]
   },
   

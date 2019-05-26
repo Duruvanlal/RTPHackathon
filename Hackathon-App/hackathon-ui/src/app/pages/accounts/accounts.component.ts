@@ -4,7 +4,9 @@ import { UserService } from './../../services/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserPmtAccount } from './../../models/user.mode';
-//import {UserPmtAccount} from './../../models/user.mode';
+import { User } from './../../models/user.mode';
+import { Router } from '@angular/router';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 
 declare var jquery: any;
 declare var $: any;
@@ -22,65 +24,81 @@ declare let document: any;
 export class AccountsComponent implements OnInit, AfterViewInit {
 
   @ViewChild('editpayment') public editpayment: TemplateRef<any>;
+  @ViewChild('createUPAModal') createUPAModal: ModalDirective;
+
 
   yoddleToken = null;
   rows = [];
   temp = [];
   loadingIndicator: boolean = true;
   reorderable: boolean = true;
-
+  currentUser: User;
+  userPmtAccountList : UserPmtAccount[]=[];
+  selectedUserPmtAccount = new UserPmtAccount();
+  selectedUPA : string;
   columns = [
   ];
 
-  constructor(private yodleeService: YodleeService, private spinner: NgxSpinnerService, 
-    private toastrService: ToastrService,private userService: UserService) {
-    // this.yodleeService.getUserToken().subscribe(
-    //   data => {
-    //     console.log('jwtUserToken ' + data.jwtUserToken);
-    //     this.jwtUserToken = data.jwtUserToken;
-    //     document.getElementById("token").value = this.jwtUserToken;
-    //   },
-    //   error => {
-    //     this.toastrService.error('Error in getting the token');
-    //   }
-    // );
-    this.spinner.show();
+  constructor(private yodleeService: YodleeService, private router : Router,
+    private spinner: NgxSpinnerService,
+    private toastrService: ToastrService, private userService: UserService) {
+
+    this.currentUser = JSON.parse(localStorage.getItem('user'));
     this.yoddleToken = localStorage.getItem('yoddleToken');
+
+    this.userService.getUserAccounts(this.currentUser.userName).subscribe((res) => {
+        this.userPmtAccountList = res;
+        this.temp = [...res];
+        this.rows = res;
+    });
+
+  }
+
+  linkAccounts() {
+    this.spinner.show();
     this.yodleeService.getUserAccounts().subscribe(
       data => {
 
-        this.temp = [...data.account];
-        this.rows = data.account;
+        let yodleeRows : any;
+        yodleeRows = data.account;
 
-        for (let row of this.rows) {
-          let userPmtAccount = new UserPmtAccount();
-    
-          userPmtAccount.accountType = row.accountType;
-          userPmtAccount.shortName = row.accountName;
-          userPmtAccount.accountName = row.accountName;
-          userPmtAccount.bankName = row.providerName;
-          userPmtAccount.userId = row.accountName;
-          userPmtAccount.accountNumber = row.accountNumber;
-          userPmtAccount.routingNumber = '026009593';
-    
-          this.userPmtAct.push(userPmtAccount);
+        for (let row of yodleeRows) {
+          if (row.accountName == this.currentUser.userName) {
+            let userPmtAccount = new UserPmtAccount();
+
+            userPmtAccount.accountType = row.accountType;
+            userPmtAccount.shortName = row.accountName;
+            userPmtAccount.accountName = row.accountName;
+            userPmtAccount.bankName = row.providerName;
+            userPmtAccount.userId = row.accountName;
+            userPmtAccount.accountNumber = row.accountNumber;
+            userPmtAccount.routingNumber = '026009593';
+
+            this.userPmtAct.push(userPmtAccount);
+          }
         }
-    
+
         this.userService.postUserAct(this.userPmtAct).subscribe(
-          (res) =>{
+          (res) => {
             this.toastrService.success('Accounts successfully Linked to Zillpay');
-          },(error)=>{
-           // this.toastrService.error('Error in linking accounts to Zillpay');
+            this.userService.getUserAccounts(this.currentUser.userName).subscribe((res) => {
+              this.userPmtAccountList = res;
+              this.temp = [...res];
+              this.rows = res;
+          });
+          }, (error) => {
+            this.spinner.hide();
+         //   this.toastrService.error('Error in linking the accounts');
           }
         );
 
         this.spinner.hide();
-        // this.toastrService.error('Error in fetching the accounts');
       }, error => {
         this.spinner.hide();
         this.toastrService.error('Error in fetching the accounts');
       }
     );
+
   }
 
   updateFilter(event) {
@@ -90,7 +108,6 @@ export class AccountsComponent implements OnInit, AfterViewInit {
       return d.accountName.toLowerCase().indexOf(val) !== -1
         || d.accountType.toLowerCase().indexOf(val) !== -1
         || d.accountNumber.toLowerCase().indexOf(val) !== -1
-        || d.accountStatus.toLowerCase().indexOf(val) !== -1
         || !val;
     });
     this.rows = temp;
@@ -99,16 +116,16 @@ export class AccountsComponent implements OnInit, AfterViewInit {
 
     this.columns = [
       { name: 'Account Name', prop: 'accountName' },
-      { name: 'Display Name', prop: 'displayedName' },
+      { name: 'Short Name', prop: 'shortName' },
       { name: 'Account Type', prop: 'accountType' },
       { name: 'Account Number', prop: 'accountNumber' },
-      { name: 'Account Status', prop: 'accountStatus' }
+      { name: 'Routing Number', prop: 'routingNumber' },
     ];
-    this.columns.push({ name: 'Action', cellTemplate: this.editpayment });
+    this.columns.push({ name: 'UPA', cellTemplate: this.editpayment });
 
     this.loadingIndicator = false;
     document.getElementById("token").value = this.yoddleToken;
-    
+
     (function (window) {
       //Open FastLink
       var fastlinkBtn = document.getElementById('btn-fastlink');
@@ -150,5 +167,31 @@ export class AccountsComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
 
+  }
+
+  action(row){
+    this.createUPAModal.show();
+    this.selectedUserPmtAccount = row;
+    console.log('invoiceDetail '+JSON.stringify(this.selectedUserPmtAccount));
+  }
+  createUPA(){
+    this.selectedUserPmtAccount.upaCD = this.selectedUPA;
+    this.userService.updateUserAct(this.selectedUserPmtAccount).subscribe(
+      res=>{
+          this.toastrService.success("UPA created and added");
+      },error => {
+        this.toastrService.success("Error while creating UPA");
+      }
+    );
+  }
+  newAccount(){
+    this.router.navigate(['/pages/new-account']);
+  }
+  public isValidString(str: string): boolean {
+    if (!(str != null && str != undefined && str.length > 0)) {
+      return false;
+    } else {
+      return true;
+    }
   }
 }

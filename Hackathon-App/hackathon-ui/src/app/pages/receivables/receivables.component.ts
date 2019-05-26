@@ -3,6 +3,7 @@ import {User} from './../../models/user.mode';
 import {UserService} from './../../services/user.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import {InvoiceMaster, InvoiceDetail} from './../../models/invoice.mode';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class ReceivablesComponent implements OnInit {
   rows= [];
   columns = [];
   temp = [];
-  constructor(private userService : UserService) {
+  constructor(private userService : UserService,private router : Router,) {
     this.currentUser = JSON.parse(localStorage.getItem('user'));
     this.userService.getReceivables(this.currentUser.userName).subscribe(
       res =>{
@@ -55,6 +56,9 @@ export class ReceivablesComponent implements OnInit {
     console.log('invoiceDetail '+JSON.stringify(this.invoiceDetail));
   }
 
+  goToNewInvoice(){
+    this.router.navigate(['/pages/new/invoice']);
+  }
   ngOnInit() {
 
     this.columns = [
