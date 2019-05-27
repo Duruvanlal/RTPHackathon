@@ -1,6 +1,7 @@
 package com.swapstech.hackathon.employer.model;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -68,6 +69,9 @@ public class InvoiceMaster implements Serializable {
 	@Column(name = "SELLER_UPA_ID")
 	private String sellerUpaId;
 
+	@Column(name = "TOTAL_AMOUNT")
+	private BigInteger totalAmount;
+	
 	@Column(name = "CREATED_BY")
 	private String createdBy;
 
@@ -120,6 +124,14 @@ public class InvoiceMaster implements Serializable {
 
 	public void setPoNumber(String poNumber) {
 		this.poNumber = poNumber;
+	}
+
+	public BigInteger getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(BigInteger totalAmount) {
+		this.totalAmount = totalAmount;
 	}
 
 	public String getInventryTerm() {

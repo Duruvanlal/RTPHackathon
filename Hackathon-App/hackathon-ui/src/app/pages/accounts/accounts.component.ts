@@ -4,7 +4,7 @@ import { UserService } from './../../services/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserPmtAccount } from './../../models/user.mode';
-import { User } from './../../models/user.mode';
+import { User,UPAMaster } from './../../models/user.mode';
 import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 
@@ -25,6 +25,7 @@ export class AccountsComponent implements OnInit, AfterViewInit {
 
   @ViewChild('editpayment') public editpayment: TemplateRef<any>;
   @ViewChild('createUPAModal') createUPAModal: ModalDirective;
+  @ViewChild('linkUPAModal') linkUPAModal: ModalDirective;
 
 
   yoddleToken = null;
@@ -34,8 +35,10 @@ export class AccountsComponent implements OnInit, AfterViewInit {
   reorderable: boolean = true;
   currentUser: User;
   userPmtAccountList : UserPmtAccount[]=[];
+  upaMaster : UPAMaster[] =[];
   selectedUserPmtAccount = new UserPmtAccount();
   selectedUPA : string;
+  linkUPAId : any;
   columns = [
   ];
 
@@ -51,6 +54,14 @@ export class AccountsComponent implements OnInit, AfterViewInit {
         this.temp = [...res];
         this.rows = res;
     });
+
+    this.userService.getUserUpa(this.currentUser.userName).subscribe(
+      res => {
+        this.upaMaster =res;
+      },error=>{
+
+      }
+    );
 
   }
 
@@ -170,32 +181,65 @@ export class AccountsComponent implements OnInit, AfterViewInit {
   }
 
   action(row){
-    this.createUPAModal.show();
+    this.linkUPAModal.show();
     this.selectedUserPmtAccount = row;
     console.log('invoiceDetail '+JSON.stringify(this.selectedUserPmtAccount));
   }
-  closeUpaModel(){
-    this.selectedUPA = '';
-    this.selectedUserPmtAccount.upaCD ='';
-    this.createUPAModal.hide();
+
+  closeLinkUPA(){
+    this.linkUPAModal.hide();
   }
-  createUPA(){
-    this.selectedUserPmtAccount.upaCD = this.selectedUPA;
+
+  linkUPA(){
+     this.selectedUserPmtAccount.upaCD = this.linkUPAId;
     this.spinner.show();
     this.userService.updateUserAct(this.selectedUserPmtAccount).subscribe(
       res=>{
         this.spinner.hide();
-          this.toastrService.success("UPA created and added");
+          this.toastrService.success("UPA linked successfully");
           this.userService.refresh();
       },error => {
         this.spinner.hide();
-        this.toastrService.success("Error while creating UPA");
+        this.toastrService.success("Error while linking UPA");
         this.createUPAModal.hide();
       }
     );
   }
+
+  closeUpaModel(){
+    this.selectedUPA = '';
+    this.createUPAModal.hide();
+  }
+  createUPA(){
+  
+    if(this.isValidString(this.selectedUPA)){
+      let upaMaster = new UPAMaster();
+      upaMaster.upaCd = this.selectedUPA;
+      upaMaster.userId = this.currentUser.userName;
+      upaMaster.userUpaMstrId = this.currentUser.userName+"_"+this.selectedUPA;
+      this.spinner.show();
+      this.userService.postUpa(upaMaster).subscribe(
+        res =>{
+          this.spinner.hide();
+          this.toastrService.success("UPA created successfully");
+          this.userService.refresh();
+        },error =>{
+          this.spinner.hide();
+          this.toastrService.error("Error while creating UPA");
+        }
+      );
+    }else{
+      this.toastrService.info('Please input UPA ID');
+    }
+        
+
+  }
   newAccount(){
     this.router.navigate(['/pages/new-account']);
+  }
+
+  generateUPA(){
+    this.createUPAModal.show();
   }
   public isValidString(str: string): boolean {
     if (!(str != null && str != undefined && str.length > 0)) {

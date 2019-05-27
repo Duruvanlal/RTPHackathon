@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { GlobalProperty } from '../../../global';
 import { UserService } from '../../services/user.service';
-import { InvoiceMaster, InvoiceDetail } from '../../models/invoice.mode';
+import { InvoiceMaster, InvoiceDetail,RTPRequest } from '../../models/invoice.mode';
 import { User,UserPmtAccount } from './../../models/user.mode';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -153,12 +153,29 @@ export class NewInvoiceComponent implements OnInit {
         // buyer, seller and sub due date auto filled in form
       
         this.userService.submitInvoice(this.invoiceMaster).subscribe((res) => {
+
+          let rtpRequest = new RTPRequest();
+          rtpRequest.paymentReasonType='INVOICE';
+          rtpRequest.createdBy = this.currentUser.userName;
+          rtpRequest.paymentReasonRefId = res.invoiceRefId;
+          rtpRequest.paymentAmount = res.totalAmount;
+          rtpRequest.payerUpaCd = this.invoiceMaster.buyerUpaId;
+          rtpRequest.requestorUpaCd = this.invoiceMaster.sellerUpaId;
+
+          this.userService.postZillTransaction(rtpRequest).subscribe(
+            res =>{
+
+            },
+            error => {
+              
+            }
+          );
+
           this.toastrService.success('Invoice saved successfully');
           this.router.navigate(['/pages/receivables']);
         },(error) => {
           this.toastrService.info('Error during saving the invoice');
         });
-    
     
     }else{
       console.log('Invoice ' + JSON.stringify(this.invoiceMaster));

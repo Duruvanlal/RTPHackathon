@@ -1,7 +1,7 @@
 import { Injectable, Renderer2 } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { GlobalProperty } from '../../global';
-import { User,Token,UserPmtAccount } from './../models/user.mode';
+import { User,Token,UserPmtAccount,UPAMaster } from './../models/user.mode';
 import {InvoiceMaster,InvoiceDetail} from './../models/invoice.mode';
 import { Subject, BehaviorSubject, Observable, of, concat } from 'rxjs';
 import { Router } from '@angular/router';
@@ -37,8 +37,8 @@ export class UserService {
     return this.http.get<UserPmtAccount[]>(this.global.url + "receiver-user-accounts/"+userId);
   }
 
-  public submitInvoice(invoice) {
-    return this.http.post(this.global.url + "invoice", invoice);
+  public submitInvoice(invoice): Observable<InvoiceMaster>  {
+    return this.http.post<InvoiceMaster>(this.global.url + "invoice", invoice);
   }
 
   public getReceivables(sellerId): Observable<InvoiceMaster[]> {
@@ -55,6 +55,25 @@ export class UserService {
 
   public updateUserAct(data) {
     return this.http.put(this.global.url + "user-accounts", data);
+  }
+
+  public getUserUpa(userId): Observable<UPAMaster[]> {
+    return this.http.get<UPAMaster[]>(this.global.url + "upa-id/"+userId);
+  }
+
+
+  public postUpa(data): Observable<UPAMaster>  {
+    return this.http.post<UPAMaster>(this.global.url + "user/upa-id", data);
+  }
+
+
+
+  public postZillTransaction(data) {
+    return this.http.post(this.global.zillPayUrl + "zill/transactions", data);
+  }
+
+  public postRfpReq(data) {
+    return this.http.post(this.global.zillPayUrl + "zill/transactions/rfp-response", data);
   }
 
   public refresh() {

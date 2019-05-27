@@ -153,17 +153,10 @@ public class UserController {
 		try {
 			if(userPmtAct !=null) {
 				userPmtAct = userPmtActRepository.save(userPmtAct);
-				
-				UserUpaMaster userUpaMaster = new UserUpaMaster();
-				userUpaMaster.setUpaCd(userPmtAct.getUpaCD());
-				userUpaMaster.setUserId(userPmtAct.getUserId());
-				userUpaMaster.setUserUpaMstrId(userPmtAct.getUserId()+"_"+userPmtAct.getUpaCD());
-				userUpaMaster = userUpaMastRepository.save(userUpaMaster);
-				
-				
+								
 				UserActUpaMapping userActUpaMapping = new UserActUpaMapping();
 				userActUpaMapping.setUserPymtAcctId(userPmtAct.getUserPmtActId());
-				userActUpaMapping.setUserUPAMstrId(userUpaMaster.getUserUpaMstrId());
+				userActUpaMapping.setUserUPAMstrId(userPmtAct.getUserId()+"_"+userPmtAct.getUpaCD());
 				userActUpaMapping = userActUpaMapRepository.save(userActUpaMapping);
 			}else {
 				return (ResponseEntity<Object>) ResponseEntity.badRequest();
@@ -201,6 +194,31 @@ public class UserController {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return ResponseEntity.ok(accounts);
+	}
+	
+	@GetMapping(value = "upa-id/{userId}")
+	public ResponseEntity<List<UserUpaMaster>> getUserUpaMaster(@PathVariable ("userId") String userId) {
+	
+		List<UserUpaMaster> accounts = new ArrayList<UserUpaMaster>();
+		try {	
+			accounts = userUpaMastRepository.findByUserId(userId);
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return ResponseEntity.ok(accounts);
+	}
+	
+	@PostMapping(value = "user/upa-id")
+	public ResponseEntity<UserUpaMaster> saveUpa(@RequestBody UserUpaMaster userUpaMaster) {
+
+		try {	
+			userUpaMaster = userUpaMastRepository.save(userUpaMaster);
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return ResponseEntity.ok(userUpaMaster);
 	}
 
 }
