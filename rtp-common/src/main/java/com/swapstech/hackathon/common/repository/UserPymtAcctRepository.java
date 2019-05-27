@@ -14,5 +14,5 @@ import com.swapstech.hackathon.common.model.UserPaymentAccount;
  */
 @Repository
 public interface UserPymtAcctRepository extends JpaRepository<UserPaymentAccount, Long> {
-	public UserPaymentAccount findByUpaCd(String upaCd);
+	public UserPaymentAccount findByUserPaymentAcctId(String userPaymentAcctId);
 }

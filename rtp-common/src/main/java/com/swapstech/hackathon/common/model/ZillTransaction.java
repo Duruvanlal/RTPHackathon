@@ -39,7 +39,7 @@ public class ZillTransaction implements Serializable{
 	String requestorUpaCd;
 	@Column(name = "PAYER_UPA_CD", nullable=false)
 	String payerUpaCd;
-	@Column(name = "RTP_REF_ID", nullable=false)
+	@Column(name = "RTP_TRANS_ID", nullable=false)
 	String rtpTransId;
 	@Column(name = "CREATED_BY", nullable=false)
 	String createdBy;

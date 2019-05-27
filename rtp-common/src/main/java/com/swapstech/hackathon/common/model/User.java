@@ -68,13 +68,13 @@ public class User {
 	private String updatedBy;
 
 	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "ADDESS_ID", referencedColumnName = "id")
+    @JoinColumn(name = "ADDRESS_ID", referencedColumnName = "id")
 	private Address address;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	/*@ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "ENTITY_ID", nullable = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Company company;
+    private Company company;*/
 	
 	@Column(name = "agent_memeber_id")
 	private String agentMemberId;
@@ -192,13 +192,13 @@ public class User {
 		this.address = address;
 	}
 
-	public Company getCompany() {
+	/*public Company getCompany() {
 		return company;
 	}
 
 	public void setCompany(Company company) {
 		this.company = company;
-	}
+	}*/
 
 	public String getMiddleName() {
 		return middleName;
@@ -237,7 +237,7 @@ public class User {
 		return "User [id=" + id + ", userId=" + userId + ", userName=" + userName + ", firstName=" + firstName
 				+ ", middleName=" + middleName + ", lastName=" + lastName + ", password=" + password + ", type=" + type
 				+ ", phone=" + phone + ", email=" + email + ", status=" + status + ", createdBy=" + createdBy
-				+ ", updatedBy=" + updatedBy + ", address=" + address + ", company=" + company + ", agentMemberId="
+				+ ", updatedBy=" + updatedBy + ", address=" + address + ", agentMemberId="
 				+ agentMemberId + ", contractorList=" + contractorList + "]";
 	}
 	

@@ -26,8 +26,8 @@ public class UserPaymentAccount implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", nullable=false)
 	private Long id;
-	@Column(name = "UPA_CD", nullable=false)
-	private String upaCd;
+	@Column(name = "USER_PYMT_ACCT_ID", nullable=false)
+	private String userPaymentAcctId;
 	@Column(name = "USER_ID", nullable=false)
 	private String userId;
 	@Column(name = "ACCT_TYPE", nullable=false)
@@ -56,11 +56,18 @@ public class UserPaymentAccount implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getUpaCd() {
-		return upaCd;
+	
+	public String getUserPaymentAcctId() {
+		return userPaymentAcctId;
 	}
-	public void setUpaCd(String upaCd) {
-		this.upaCd = upaCd;
+	public void setUserPaymentAcctId(String userPaymentAcctId) {
+		this.userPaymentAcctId = userPaymentAcctId;
+	}
+	public String getAcctType() {
+		return acctType;
+	}
+	public void setAcctType(String acctType) {
+		this.acctType = acctType;
 	}
 	public String getUserId() {
 		return userId;
@@ -124,10 +131,11 @@ public class UserPaymentAccount implements Serializable {
 	}
 	@Override
 	public String toString() {
-		return "UserPaymentAccount [id=" + id + ", upaCd=" + upaCd + ", userId=" + userId + ", shortName=" + shortName
-				+ ", accountName=" + accountName + ", bankName=" + bankName + ", accountNumber=" + accountNumber
-				+ ", routingNumber=" + routingNumber + ", createdBy=" + createdBy + ", createdDate=" + createdDate
-				+ ", updatedBy=" + updatedBy + ", updatedDate=" + updatedDate + "]";
+		return "UserPaymentAccount [id=" + id + ", userPaymentAcctId=" + userPaymentAcctId + ", userId=" + userId
+				+ ", acctType=" + acctType + ", shortName=" + shortName + ", accountName=" + accountName + ", bankName="
+				+ bankName + ", accountNumber=" + accountNumber + ", routingNumber=" + routingNumber + ", createdBy="
+				+ createdBy + ", createdDate=" + createdDate + ", updatedBy=" + updatedBy + ", updatedDate="
+				+ updatedDate + "]";
 	}
 	
 	
