@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewEncapsulation, TemplateRef, ViewChild } from '@angular/core';
-import {InvoiceMaster, InvoiceDetail} from './../../models/invoice.mode';
+import {InvoiceMaster, InvoiceDetail,RfpRequest} from './../../models/invoice.mode';
 import {User} from './../../models/user.mode';
 import {UserService} from './../../services/user.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-payables',
@@ -22,7 +23,7 @@ export class PayablesComponent implements OnInit {
   columns = [];
   temp = [];
 
-   constructor(private userService : UserService) {
+   constructor(private userService : UserService,private toastrService : ToastrService) {
     this.currentUser = JSON.parse(localStorage.getItem('user'));
     this.userService.getPayables(this.currentUser.userName).subscribe(
       res =>{
@@ -52,6 +53,46 @@ export class PayablesComponent implements OnInit {
     this.viewInvoiceModal.show();
     this.invoiceDetail = row.invoiceDetail;
     console.log('invoiceDetail '+JSON.stringify(this.invoiceDetail));
+  }
+  reasonForAction = '';
+  approveInvoice() {
+    let rfpRequest = new RfpRequest();
+    rfpRequest.action = 'APPROVE';
+    rfpRequest.referenceId= this.invoiceDetail.invoiceRefId;
+    rfpRequest.rejectReason = this.reasonForAction
+
+    this.userService.postRfpReq(rfpRequest).subscribe(
+      res=>{
+
+      },error =>{
+        
+      }
+    );
+    this.reasonForAction = '';
+  }
+
+  rejectInvoice() {
+    if (this.reasonForAction != null && this.reasonForAction != undefined &&
+      this.reasonForAction.length > 0) {
+
+        let rfpRequest = new RfpRequest();
+        rfpRequest.action = 'REJECT';
+        rfpRequest.referenceId= this.invoiceDetail.invoiceRefId;
+        rfpRequest.rejectReason = this.reasonForAction;
+
+        this.userService.postRfpReq(rfpRequest).subscribe(
+          res=>{
+
+          },error =>{
+
+          }
+        );
+        this.reasonForAction = '';
+    } else {
+      this.toastrService.info('Reject reason is required');
+    }
+    this.reasonForAction = '';
+
   }
 
   ngOnInit() {

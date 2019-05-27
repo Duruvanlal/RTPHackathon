@@ -58,7 +58,14 @@ export class UserPmtAccount{
     updatedDateTime: any;
 }
 
+export class UPAMaster{
+        id : any;
+        userUpaMstrId : any;
+        userId : any;
+        upaCd : any;
+
+}
+
 export class Token{
     jwtToken : any;
 }
-

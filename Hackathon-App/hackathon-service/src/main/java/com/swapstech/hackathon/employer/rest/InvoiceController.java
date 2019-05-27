@@ -56,12 +56,12 @@ public class InvoiceController {
 		invoiceMaster.setInvoiceDetail(invoiceDetailList);
 		
 		try {
-			invoiceMasterRepository.save(invoiceMaster);
+			invoiceMaster = invoiceMasterRepository.save(invoiceMaster);
 		}catch(Exception e) {
 			return new ResponseEntity<Object>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 			
-		return new ResponseEntity<Object>(HttpStatus.OK);
+		return ResponseEntity.ok(invoiceMaster);
 		
 	}
 	

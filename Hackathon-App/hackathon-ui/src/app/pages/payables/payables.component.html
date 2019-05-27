@@ -47,10 +47,18 @@
                        <td> {{row.totalAmount}} </td>
                      </tr>       
           </table>
-        <div class="col-12 mt-3 py-1">
-          <button class="btn btn-success mr-1 w-100p"  type="button">Approve</button>
-          <button class="btn btn-danger mr-1 w-100p"  type="button">Reject</button>
-         
+        <div class="row">
+            <div class="col-md-4">
+                <mat-form-field>
+                    <input placeholder="Reason" name="reason" type="text" matInput [(ngModel)]="reasonForAction"> 
+                </mat-form-field>
+              
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-success mr-1 w-100p" (click)="approveInvoice()" type="button">Approve</button>
+                <button class="btn btn-danger mr-1 w-100p" (click)="rejectInvoice()"  type="button">Reject</button>
+            </div>
+          
         </div>
       </div>
     </div>
