@@ -15,6 +15,6 @@ import com.swapstech.hackathon.common.model.ZillTransactionDetails;
  */
 @Repository
 public interface ZillTransactionDetailsRepository extends JpaRepository<ZillTransactionDetails, Long> {
-	public ZillTransactionDetails findByPaymentTransCode(ZillTransaction paymentTransCode);
+	public ZillTransactionDetails findByPaymentTransCode(String paymentTransCode);
 
 }

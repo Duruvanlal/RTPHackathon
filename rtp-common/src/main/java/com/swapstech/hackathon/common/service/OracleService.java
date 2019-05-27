@@ -1,6 +1,7 @@
 
 package com.swapstech.hackathon.common.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -17,12 +18,14 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.swapstech.hackathon.common.model.AccountActivity;
 import com.swapstech.hackathon.common.model.AlertDTO;
 import com.swapstech.hackathon.common.model.AlertList;
 import com.swapstech.hackathon.common.model.CurrencyAmount;
 import com.swapstech.hackathon.common.model.RfpResponse;
 import com.swapstech.hackathon.common.model.RtpRfpDTO;
 import com.swapstech.hackathon.common.model.TokenResponseDTO;
+import com.swapstech.hackathon.common.model.TransactionItem;
 import com.swapstech.hackathon.common.model.User;
 import com.swapstech.hackathon.common.model.UserAcctUpaMapping;
 import com.swapstech.hackathon.common.model.UserPaymentAccount;
@@ -152,10 +155,11 @@ public class OracleService {
 				List<AlertDTO> alertsList = response.getBody().getAlertDTOs();
 				for (AlertDTO alertDTO : alertsList) {
 					String alertMsg=alertDTO.getMessageBody();
+					LOGGER.info("Alert Messages:{}",alertMsg);
 					if (StringUtils.isNotBlank(alertMsg) && alertMsg.contains("MoneyRequested") && alertMsg.contains(rtpRefId)) {	
 						String [] strArr=alertMsg.split("Instruction_Id");
 						instructionId=strArr[1].split(",")[0].replaceAll("&#x3a;", "");
-						System.out.println("System Alert:"+instructionId);
+						LOGGER.info("Instruction ID:{}",instructionId);
 						
 					}
 				}
@@ -163,14 +167,16 @@ public class OracleService {
 		}
 		return instructionId;
 	}
-	/*public RtpRfpDTO approveRfp(ZillTransaction transaction) {
+	public RtpRfpDTO approveRfp(ZillTransaction transaction) {
 		String url = ApiUrlConstants.RFP_ACTION_URL + transaction.getRtpTransId() + "/accept";
 		String userId = null;
 		String pwd = null;
 
 		RtpRfpDTO rfpDto = new RtpRfpDTO();
 		ValueObject creditAccount = new ValueObject();
-		UserPaymentAccount requestorAccount = userAcctService.findUserAccountByUpa(transaction.getRequestorUpaCd());
+		UserUpaMaster requestorUpaMaster=userUpaMasterRepository.findByUpaCd(transaction.getRequestorUpaCd());
+		UserAcctUpaMapping requestorMapping=userAcctUpaMappingRepository.findByUserUpaMasterId(requestorUpaMaster.getUserUpaMasterId());		
+		UserPaymentAccount requestorAccount = userAcctService.findUserAccountByUserPaymentSAcct(requestorMapping.getUserPaymentAcctId());
 		if (requestorAccount != null && StringUtils.isNotBlank(requestorAccount.getAccountNumber())) {
 			creditAccount.setValue(requestorAccount.getAccountNumber());
 			User creditor = userAcctService.findByUserId(requestorAccount.getUserId());
@@ -180,7 +186,9 @@ public class OracleService {
 			}
 		}
 		rfpDto.setCreditAccountId(creditAccount);
-		UserPaymentAccount approverAccount = userAcctService.findUserAccountByUpa(transaction.getPayerUpaCd());
+		UserUpaMaster payerUpaMaster=userUpaMasterRepository.findByUpaCd(transaction.getPayerUpaCd());
+		UserAcctUpaMapping payerMapping=userAcctUpaMappingRepository.findByUserUpaMasterId(payerUpaMaster.getUserUpaMasterId());	
+		UserPaymentAccount approverAccount = userAcctService.findUserAccountByUserPaymentSAcct(payerMapping.getUserPaymentAcctId());
 		if (approverAccount != null && StringUtils.isNotBlank(approverAccount.getAccountNumber())) {
 			rfpDto.setDebitAccountId(approverAccount.getAccountNumber());
 			User payer = userAcctService.findByUserId(approverAccount.getUserId());
@@ -200,6 +208,8 @@ public class OracleService {
 			rfpDto.setAmount(currencyAmount);
 		}
 		String token = getToken(userId, pwd);
+		rfpDto.setSystemReferenceNo(transaction.getRtpTransId());
+		rfpDto.setInstructionId(getInstructionId(transaction.getRtpTransId(), token));
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.add(AUTH, BEARER + token);
@@ -219,13 +229,15 @@ public class OracleService {
 	}
 
 	public RtpRfpDTO rejectRfp(ZillTransaction transaction) {
-		String url = ApiUrlConstants.RFP_ACTION_URL + transaction.getInstructionId() + "/reject";
+		String url = ApiUrlConstants.RFP_ACTION_URL + transaction.getRtpTransId() + "/reject";
 		String userId = null;
 		String pwd = null;
 
 		RtpRfpDTO rfpDto = new RtpRfpDTO();
 		ValueObject creditAccount = new ValueObject();
-		UserPaymentAccount requestorAccount = userAcctService.findUserAccountByUpa(transaction.getRequestorUpaCd());
+		UserUpaMaster requestorUpaMaster=userUpaMasterRepository.findByUpaCd(transaction.getRequestorUpaCd());
+		UserAcctUpaMapping requestorMapping=userAcctUpaMappingRepository.findByUserUpaMasterId(requestorUpaMaster.getUserUpaMasterId());		
+		UserPaymentAccount requestorAccount = userAcctService.findUserAccountByUserPaymentSAcct(requestorMapping.getUserPaymentAcctId());
 		if (requestorAccount != null && StringUtils.isNotBlank(requestorAccount.getAccountNumber())) {
 			creditAccount.setValue(requestorAccount.getAccountNumber());
 			User creditor = userAcctService.findByUserId(requestorAccount.getUserId());
@@ -237,7 +249,9 @@ public class OracleService {
 			}
 		}
 		rfpDto.setCreditAccountId(creditAccount);
-		UserPaymentAccount approverAccount = userAcctService.findUserAccountByUpa(transaction.getPayerUpaCd());
+		UserUpaMaster payerUpaMaster=userUpaMasterRepository.findByUpaCd(transaction.getPayerUpaCd());
+		UserAcctUpaMapping payerMapping=userAcctUpaMappingRepository.findByUserUpaMasterId(payerUpaMaster.getUserUpaMasterId());	
+		UserPaymentAccount approverAccount = userAcctService.findUserAccountByUserPaymentSAcct(payerMapping.getUserPaymentAcctId());
 		if (approverAccount != null && StringUtils.isNotBlank(approverAccount.getAccountNumber())) {
 			rfpDto.setDebitAccountId(approverAccount.getAccountNumber());
 			User payer = userAcctService.findByUserId(approverAccount.getUserId());
@@ -254,6 +268,8 @@ public class OracleService {
 			rfpDto.setAmount(currencyAmount);
 		}
 		String token = getToken(userId, pwd);
+		rfpDto.setSystemReferenceNo(transaction.getRtpTransId());
+		rfpDto.setInstructionId(getInstructionId(transaction.getRtpTransId(), token));
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.add(AUTH, BEARER + token);
@@ -270,6 +286,40 @@ public class OracleService {
 		}
 		LOGGER.info("RtpRfp Reject Response:::{}", rtpRfpDTO);
 		return rtpRfpDTO;
-	}*/
+	}
+	
+	public List<TransactionItem> getRtpTransactions(String acctNum) {
+		UserPaymentAccount account = userAcctService.findByAccountNumber(acctNum);
+		String token=null;
+		List<TransactionItem> items=null; 
+		if (account != null && StringUtils.isNotBlank(account.getUserId())) {			
+			User user = userAcctService.findByUserId(account.getUserId());
+			if (user != null) {
+				token = getToken(user.getUserId(), user.getPassword());
+			}
+			String url = ApiUrlConstants.RTP_ACCOUNTS_URL+acctNum+"/transactions?noOfTransactions=5&searchBy=LNT&locale=en";
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.add(AUTH, BEARER + token);
+			
+			RestTemplate restTemplate = new RestTemplate();
+			HttpEntity request = new HttpEntity(headers);
+			items=new ArrayList<>();
+			AccountActivity activity=new AccountActivity();
+			ResponseEntity<AccountActivity> response = restTemplate.exchange(url, HttpMethod.GET, request, AccountActivity.class);
+			if (response != null && response.getBody() != null) {
+				if (StringUtils.isNotBlank(response.getBody().getStatus().getResult())
+						&& "SUCCESSFUL".equalsIgnoreCase(response.getBody().getStatus().getResult())) {
+					items = response.getBody().getItems();
+					for (TransactionItem transactionItem : items) {
+						LOGGER.info("TransactionItem:{}",transactionItem);
+					}
+				}
+			}
+			
+		}
+		return items;
+		
+	}
 
 }

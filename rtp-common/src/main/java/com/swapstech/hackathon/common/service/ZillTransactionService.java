@@ -9,9 +9,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.swapstech.hackathon.common.model.AccountActivity;
 import com.swapstech.hackathon.common.model.RfpAction;
 import com.swapstech.hackathon.common.model.RfpResponseEnum;
 import com.swapstech.hackathon.common.model.RtpRfpDTO;
+import com.swapstech.hackathon.common.model.TransactionItem;
 import com.swapstech.hackathon.common.model.ZillTransaction;
 import com.swapstech.hackathon.common.model.ZillTransactionDetails;
 import com.swapstech.hackathon.common.model.ZillTransactionStatus;
@@ -74,12 +76,16 @@ public class ZillTransactionService {
 			txn=getZillTransactionByReasonRefId(action.getReferenceId());
 			if (action.getAction() != null
 					&& action.getAction().name().equalsIgnoreCase(RfpResponseEnum.APPROVE.name())) {
-				//oracleService.approveRfp(txn);
+				oracleService.approveRfp(txn);
 			} else {
-				//oracleService.rejectRfp(txn);
+				oracleService.rejectRfp(txn);
 			}
 		}
 
 		return txn;
+	}
+	
+	public List<TransactionItem> getRtpTransactions(String acctNumber){
+		return oracleService.getRtpTransactions(acctNumber);
 	}
 }

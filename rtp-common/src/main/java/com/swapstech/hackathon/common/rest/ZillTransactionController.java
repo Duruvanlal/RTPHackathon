@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.swapstech.hackathon.common.model.AccountActivity;
 import com.swapstech.hackathon.common.model.RfpAction;
+import com.swapstech.hackathon.common.model.TransactionItem;
 import com.swapstech.hackathon.common.model.ZillTransaction;
 import com.swapstech.hackathon.common.model.ZillTransactionDetails;
 import com.swapstech.hackathon.common.service.ZillTransactionDetailsService;
@@ -73,8 +75,15 @@ public class ZillTransactionController {
 	
 	@PostMapping(value = "/zill/transactions/rfp-response", produces = "application/json")
 	@ApiOperation(value = "Zill Transaction List", response = RfpAction.class)
-	public ResponseEntity<RfpAction> makeRfpAction(@RequestBody RfpAction action) {
-		//ZillTransaction newZillTransaction = service.createZillTransaction(zillTransaction);
-		return ResponseEntity.ok(action);
+	public ResponseEntity<ZillTransaction> makeRfpAction(@RequestBody RfpAction action) {
+		ZillTransaction newZillTransaction = service.makeRfpAction(action);
+		return ResponseEntity.ok(newZillTransaction);
+	}
+	
+	@GetMapping(value = "/zill/transactions/account/{acct-num}", produces = "application/json")
+	@ApiOperation(value = "Zill Transaction by Id", response = AccountActivity.class)
+	public ResponseEntity<List<TransactionItem>> getRtpTrasnactions(@PathVariable ("acct-num") String acctNum) {
+		List<TransactionItem> accountActivity =service.getRtpTransactions(acctNum);
+		return ResponseEntity.ok(accountActivity);
 	}
 }

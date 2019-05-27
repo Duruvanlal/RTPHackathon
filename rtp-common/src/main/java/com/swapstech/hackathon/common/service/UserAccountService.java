@@ -30,4 +30,8 @@ public class UserAccountService {
 		return userRepository.findByUserId(userId);
 	}
 	
+	public UserPaymentAccount findByAccountNumber(String acctNumber) {
+		return userAcctRepository.findByAccountNumber(acctNumber);
+	}
+	
 }

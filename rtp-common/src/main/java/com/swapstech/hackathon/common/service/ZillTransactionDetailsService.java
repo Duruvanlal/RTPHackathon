@@ -34,8 +34,8 @@ public class ZillTransactionDetailsService {
 	}
 	
 	public ZillTransactionDetails getZillTransactionDetailByTransCd(String paymentTransCode){
-		ZillTransaction txn=zillRepository.findByPaymentTransCode(paymentTransCode);
-		return repository.findByPaymentTransCode(txn);
+		//ZillTransaction txn=zillRepository.findByPaymentTransCode(paymentTransCode);
+		return repository.findByPaymentTransCode(paymentTransCode);
 	}
 	
 	
