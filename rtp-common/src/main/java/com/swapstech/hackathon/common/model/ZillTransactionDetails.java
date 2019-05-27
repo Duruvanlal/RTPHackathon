@@ -36,10 +36,10 @@ public class ZillTransactionDetails implements Serializable {
 	@Column(name = "id", nullable=false)
 	private long id;
 	
-	@ManyToOne
-    @JoinColumn(name = "PYMT_TRANS_CD", nullable = false)
+	//@ManyToOne
+	@Column(name = "PYMT_TRANS_CD", nullable = false)
     //@JsonIgnore
-    private ZillTransaction paymentTransCode;
+    private String paymentTransCode;
 	
 	@Column(name = "TRANS_TYPE", nullable=false)
 	String transType;
@@ -73,11 +73,11 @@ public class ZillTransactionDetails implements Serializable {
 
 	
 
-	public ZillTransaction getPaymentTransCode() {
+	public String getPaymentTransCode() {
 		return paymentTransCode;
 	}
 
-	public void setPaymentTransCode(ZillTransaction paymentTransCode) {
+	public void setPaymentTransCode(String paymentTransCode) {
 		this.paymentTransCode = paymentTransCode;
 	}
 

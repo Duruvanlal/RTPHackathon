@@ -13,6 +13,8 @@ import com.swapstech.hackathon.common.model.RfpAction;
 import com.swapstech.hackathon.common.model.RfpResponseEnum;
 import com.swapstech.hackathon.common.model.RtpRfpDTO;
 import com.swapstech.hackathon.common.model.ZillTransaction;
+import com.swapstech.hackathon.common.model.ZillTransactionDetails;
+import com.swapstech.hackathon.common.model.ZillTransactionStatus;
 import com.swapstech.hackathon.common.repository.ZillTransactionRepository;
 
 /**
@@ -23,6 +25,8 @@ import com.swapstech.hackathon.common.repository.ZillTransactionRepository;
 public class ZillTransactionService {
 	@Autowired
 	ZillTransactionRepository repository;
+	@Autowired
+	ZillTransactionDetailsService detailsRepository;
 	@Autowired
 	OracleService oracleService;
 	public List<ZillTransaction> listAllZillTransactions(){
@@ -45,9 +49,18 @@ public class ZillTransactionService {
 		Random random=new Random();
 		zillTransaction.setPaymentTransCode("Zill"+random.nextInt(999999));
 		ZillTransaction newZillTransaction= repository.save(zillTransaction);
+		ZillTransactionDetails txnDetails=new ZillTransactionDetails();
+		txnDetails.setPaymentTransCode(zillTransaction.getPaymentTransCode());
+		txnDetails.setPaymentAmount(zillTransaction.getPaymentAmount());
+		txnDetails.setPaymentCurrency("USD");
+		txnDetails.setTransStatus(ZillTransactionStatus.SUBMITTED.name());
+		txnDetails.setTransType("RFP");
+		detailsRepository.createZillTransactionDetails(txnDetails);
 		RtpRfpDTO rfpTxn=oracleService.makeRfpRequest(newZillTransaction);
 		newZillTransaction.setRtpTransId(rfpTxn.getSystemReferenceNo());
 		newZillTransaction=updateZillTransaction(newZillTransaction);
+		txnDetails.setTransStatus(ZillTransactionStatus.TRANSMITTED.name());
+		detailsRepository.updateZillTransactionDetails(txnDetails);
 		return newZillTransaction;
 	}
 	
@@ -61,9 +74,9 @@ public class ZillTransactionService {
 			txn=getZillTransactionByReasonRefId(action.getReferenceId());
 			if (action.getAction() != null
 					&& action.getAction().name().equalsIgnoreCase(RfpResponseEnum.APPROVE.name())) {
-				oracleService.approveRfp(txn);
+				//oracleService.approveRfp(txn);
 			} else {
-				oracleService.rejectRfp(txn);
+				//oracleService.rejectRfp(txn);
 			}
 		}
 

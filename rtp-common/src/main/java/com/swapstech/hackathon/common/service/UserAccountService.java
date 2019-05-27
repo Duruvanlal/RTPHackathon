@@ -22,8 +22,8 @@ public class UserAccountService {
 	@Autowired
 	UserRepository userRepository;
 	
-	public UserPaymentAccount findUserAccountByUpa(String upaCd) {
-		return userAcctRepository.findByUpaCd(upaCd);
+	public UserPaymentAccount findUserAccountByUserPaymentSAcct(String userPaymentAcctId) {
+		return userAcctRepository.findByUserPaymentAcctId(userPaymentAcctId);
 	}
 	
 	public User findByUserId(String userId) {

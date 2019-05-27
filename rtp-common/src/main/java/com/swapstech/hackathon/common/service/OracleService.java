@@ -1,27 +1,38 @@
 
 package com.swapstech.hackathon.common.service;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+
+import com.swapstech.hackathon.common.model.AlertDTO;
+import com.swapstech.hackathon.common.model.AlertList;
 import com.swapstech.hackathon.common.model.CurrencyAmount;
 import com.swapstech.hackathon.common.model.RfpResponse;
 import com.swapstech.hackathon.common.model.RtpRfpDTO;
 import com.swapstech.hackathon.common.model.TokenResponseDTO;
 import com.swapstech.hackathon.common.model.User;
+import com.swapstech.hackathon.common.model.UserAcctUpaMapping;
 import com.swapstech.hackathon.common.model.UserPaymentAccount;
+import com.swapstech.hackathon.common.model.UserUpaMaster;
 import com.swapstech.hackathon.common.model.ValueObject;
 import com.swapstech.hackathon.common.model.ZillTransaction;
 import com.swapstech.hackathon.common.model.ZillTransactionDetails;
+import com.swapstech.hackathon.common.repository.UserAcctUpaMappingRepository;
+import com.swapstech.hackathon.common.repository.UserPymtAcctRepository;
+import com.swapstech.hackathon.common.repository.UserUpaMasterRepository;
 import com.swapstech.hackathon.common.repository.util.ApiUrlConstants;
 
 /**
@@ -36,7 +47,12 @@ public class OracleService {
 	UserAccountService userAcctService;
 	@Autowired
 	ZillTransactionDetailsService transDetailsService;
-
+	@Autowired
+	UserUpaMasterRepository userUpaMasterRepository;
+	@Autowired
+	UserAcctUpaMappingRepository userAcctUpaMappingRepository;
+	@Autowired
+	UserPymtAcctRepository userPymtAcctRepository;
 	public static final String AUTH = "Authorization";
 	public static final String BASIC = "Basic MmQ3OWU5MzllMDQyYXBpYWNjZXNzOGU1ZmFiNDM2ZmI1NTgxOndlbGNvbWUx";
 	public static final String BEARER = "Bearer ";
@@ -67,7 +83,9 @@ public class OracleService {
 
 		RtpRfpDTO rfpDto = new RtpRfpDTO();
 		ValueObject creditAccount = new ValueObject();
-		UserPaymentAccount requestorAccount = userAcctService.findUserAccountByUpa(transaction.getRequestorUpaCd());
+		UserUpaMaster requestorUpaMaster=userUpaMasterRepository.findByUpaCd(transaction.getRequestorUpaCd());
+		UserAcctUpaMapping requestorMapping=userAcctUpaMappingRepository.findByUserUpaMasterId(requestorUpaMaster.getUserUpaMasterId());		
+		UserPaymentAccount requestorAccount = userAcctService.findUserAccountByUserPaymentSAcct(requestorMapping.getUserPaymentAcctId());
 		if (requestorAccount != null && StringUtils.isNotBlank(requestorAccount.getAccountNumber())) {
 			creditAccount.setValue(requestorAccount.getAccountNumber());
 			User creditor = userAcctService.findByUserId(requestorAccount.getUserId());
@@ -79,7 +97,9 @@ public class OracleService {
 			}
 		}
 		rfpDto.setCreditAccountId(creditAccount);
-		UserPaymentAccount approverAccount = userAcctService.findUserAccountByUpa(transaction.getPayerUpaCd());
+		UserUpaMaster payerUpaMaster=userUpaMasterRepository.findByUpaCd(transaction.getPayerUpaCd());
+		UserAcctUpaMapping payerMapping=userAcctUpaMappingRepository.findByUserUpaMasterId(payerUpaMaster.getUserUpaMasterId());	
+		UserPaymentAccount approverAccount = userAcctService.findUserAccountByUserPaymentSAcct(payerMapping.getUserPaymentAcctId());
 		if (approverAccount != null && StringUtils.isNotBlank(approverAccount.getAccountNumber())) {
 			rfpDto.setDebitAccountId(approverAccount.getAccountNumber());
 			User payer = userAcctService.findByUserId(approverAccount.getUserId());
@@ -112,9 +132,39 @@ public class OracleService {
 		LOGGER.info("RtpRfp Response:::{}", rtpRfpDTO);
 		return rtpRfpDTO;
 	}
+	
 
-	public RtpRfpDTO approveRfp(ZillTransaction transaction) {
-		String url = ApiUrlConstants.RFP_ACTION_URL + transaction.getInstructionId() + "/accept";
+	public String getInstructionId(String rtpRefId,String token) {
+		String url = ApiUrlConstants.RTP_ALERTS_URL;
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.add(AUTH, BEARER + token);
+		
+		RestTemplate restTemplate = new RestTemplate();
+		HttpEntity request = new HttpEntity(headers);
+		AlertList alerts=new AlertList();
+		ResponseEntity<AlertList> response = restTemplate.exchange(url, HttpMethod.GET, request, AlertList.class);
+		//ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
+		String instructionId=null;
+		if (response != null && response.getBody() != null) {
+			if (StringUtils.isNotBlank(response.getBody().getStatus().getResult())
+					&& "SUCCESSFUL".equalsIgnoreCase(response.getBody().getStatus().getResult())) {
+				List<AlertDTO> alertsList = response.getBody().getAlertDTOs();
+				for (AlertDTO alertDTO : alertsList) {
+					String alertMsg=alertDTO.getMessageBody();
+					if (StringUtils.isNotBlank(alertMsg) && alertMsg.contains("MoneyRequested") && alertMsg.contains(rtpRefId)) {	
+						String [] strArr=alertMsg.split("Instruction_Id");
+						instructionId=strArr[1].split(",")[0].replaceAll("&#x3a;", "");
+						System.out.println("System Alert:"+instructionId);
+						
+					}
+				}
+			}
+		}
+		return instructionId;
+	}
+	/*public RtpRfpDTO approveRfp(ZillTransaction transaction) {
+		String url = ApiUrlConstants.RFP_ACTION_URL + transaction.getRtpTransId() + "/accept";
 		String userId = null;
 		String pwd = null;
 
@@ -220,6 +270,6 @@ public class OracleService {
 		}
 		LOGGER.info("RtpRfp Reject Response:::{}", rtpRfpDTO);
 		return rtpRfpDTO;
-	}
+	}*/
 
 }
