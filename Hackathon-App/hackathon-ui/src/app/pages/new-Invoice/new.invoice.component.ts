@@ -146,6 +146,7 @@ export class NewInvoiceComponent implements OnInit {
       && this.invoiceTable.length > 0) {
 
         this.invoiceMaster.inventryTerm = 'Inventory';
+        this.invoiceMaster.totalAmount = this.amountSubTotal;
         this.invoiceMaster.inventorySubDateTime = this.dateTimeFormatter(new Date());
         this.invoiceMaster.inventoryDueDateTime = this.dateTimeFormatter(this.invoiceMaster.inventoryDueDateTime);
      //   this.invoiceMaster.poNumber = 101;
