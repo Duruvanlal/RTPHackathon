@@ -24,6 +24,9 @@ public class UserPaymentAccount {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", nullable = false)
 	private Long id;
+	
+	@Column(name = "USER_PYMT_ACCT_ID")
+	private String userPmtActId;
 
 	@Column(name = "USER_ID")
 	private String userId;
@@ -74,6 +77,14 @@ public class UserPaymentAccount {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getUserPmtActId() {
+		return userPmtActId;
+	}
+
+	public void setUserPmtActId(String userPmtActId) {
+		this.userPmtActId = userPmtActId;
 	}
 
 	public String getUserId() {

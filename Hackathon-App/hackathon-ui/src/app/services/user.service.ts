@@ -4,11 +4,12 @@ import { GlobalProperty } from '../../global';
 import { User,Token,UserPmtAccount } from './../models/user.mode';
 import {InvoiceMaster,InvoiceDetail} from './../models/invoice.mode';
 import { Subject, BehaviorSubject, Observable, of, concat } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class UserService {
 
-  constructor(private http: HttpClient,
+  constructor(private http: HttpClient,private router:Router,
     private global: GlobalProperty
   ) { }
 
@@ -54,5 +55,15 @@ export class UserService {
 
   public updateUserAct(data) {
     return this.http.put(this.global.url + "user-accounts", data);
+  }
+
+  public refresh() {
+    this.router.routeReuseStrategy.shouldReuseRoute = function () { return false; };
+    let currentUrl = this.router.url + '?';
+    this.router.navigateByUrl(currentUrl)
+      .then(() => {
+        this.router.navigated = false;
+        this.router.navigate([this.router.url]);
+      });
   }
 }

@@ -6,6 +6,8 @@ import { UserService } from '../../services/user.service';
 import { NgForm} from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { GlobalProperty } from '../../../global';
+import { NgxSpinnerService } from 'ngx-spinner';
+
 
 
 @Component({
@@ -21,16 +23,15 @@ export class LoginComponent {
   public showError:Boolean;
 
   constructor(private userService:UserService,
-              private toastrService: ToastrService,
+              private toastrService: ToastrService,private spinner: NgxSpinnerService,
               private global : GlobalProperty,
               private router: Router) {
      this.user = new User();
   }
 
   public login(form: NgForm){
-    console.log('JSON '+JSON.stringify(this.user));
-    //this.router.navigate(['/pages']);
     if(form.valid){
+      this.spinner.show();
       this.userService.login(this.user).subscribe((response)=>{
         if(response && response != null){
           localStorage.setItem('user', JSON.stringify(response));
@@ -39,13 +40,9 @@ export class LoginComponent {
           let item = JSON.parse(localStorage.getItem('user'));
           console.log("item==",item);
           this.router.navigate(['/pages']);
-        }else{
-          this.showError = true;
-          setTimeout( ()=>{
-            this.showError = false;
-            }, 5000)
         }
-      });
+        this.spinner.hide();
+      },error=>{this.spinner.hide();});
     }
 
     // this.userService.getYodleeToken().subscribe(

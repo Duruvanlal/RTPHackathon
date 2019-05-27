@@ -174,13 +174,23 @@ export class AccountsComponent implements OnInit, AfterViewInit {
     this.selectedUserPmtAccount = row;
     console.log('invoiceDetail '+JSON.stringify(this.selectedUserPmtAccount));
   }
+  closeUpaModel(){
+    this.selectedUPA = '';
+    this.selectedUserPmtAccount.upaCD ='';
+    this.createUPAModal.hide();
+  }
   createUPA(){
     this.selectedUserPmtAccount.upaCD = this.selectedUPA;
+    this.spinner.show();
     this.userService.updateUserAct(this.selectedUserPmtAccount).subscribe(
       res=>{
+        this.spinner.hide();
           this.toastrService.success("UPA created and added");
+          this.userService.refresh();
       },error => {
+        this.spinner.hide();
         this.toastrService.success("Error while creating UPA");
+        this.createUPAModal.hide();
       }
     );
   }

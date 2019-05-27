@@ -23,16 +23,18 @@ import com.swapstech.hackathon.employer.model.Address;
 import com.swapstech.hackathon.employer.model.Contractor;
 import com.swapstech.hackathon.employer.model.EntityMaster;
 import com.swapstech.hackathon.employer.model.User;
-
+import com.swapstech.hackathon.employer.model.UserActUpaMapping;
 import com.swapstech.hackathon.employer.model.UserPaymentAccount;
 import com.swapstech.hackathon.employer.model.UserType;
+import com.swapstech.hackathon.employer.model.UserUpaMaster;
 import com.swapstech.hackathon.employer.repository.AddressRepository;
 import com.swapstech.hackathon.employer.repository.EntityRepository;
-
+import com.swapstech.hackathon.employer.repository.UserActUpaMapRepository;
 import com.swapstech.hackathon.employer.repository.UserPmtActRepository;
 //import com.swapstech.hackathon.employer.repository.AddressRepository;
 //import com.swapstech.hackathon.employer.repository.CompanyRepository;
 import com.swapstech.hackathon.employer.repository.UserRepository;
+import com.swapstech.hackathon.employer.repository.UserUpaMastRepository;
 import com.swapstech.hackathon.employer.util.VOMapper;
 import com.swapstech.hackathon.employer.vo.LoginUserRequest;
 import com.swapstech.hackathon.employer.vo.UserClient;
@@ -50,7 +52,11 @@ public class UserController {
 	@Autowired
 	EntityRepository entityRepository;
 	
+	@Autowired
+	UserUpaMastRepository userUpaMastRepository;
 	
+	@Autowired
+	UserActUpaMapRepository userActUpaMapRepository;
 	
 	@Autowired
 	UserPmtActRepository userPmtActRepository;
@@ -74,7 +80,7 @@ public class UserController {
 		User user = VOMapper.convertToUserModel(userClient);
 		try {
 			user.getAddress().setAddressId(UUID.randomUUID().toString());
-			user.setUserId(UUID.randomUUID().toString());
+			user.setUserId(user.getUserName()); // UUID.randomUUID().toString()
 			user.getEntity().setEntityId(UUID.randomUUID().toString());
 //			if(user.getSameAddressAsEntity()) {
 //				user.getEntity().getAddress().setAddressId(user.getAddress().getAddressId());
@@ -126,7 +132,8 @@ public class UserController {
 				for(UserPaymentAccount acct :userPmtAct) {
 					UserPaymentAccount isExists = userPmtActRepository.findOneByUserIdAndAccountType(acct.getUserId(), acct.getAccountType());
 					if(!(isExists!=null)) {
-						userPmtActRepository.save(acct);
+						acct.setUserPmtActId(acct.getUserId()+"_"+acct.getAccountNumber());
+						acct = userPmtActRepository.save(acct);
 					}
 				}
 			}else {
@@ -141,10 +148,23 @@ public class UserController {
 	}
 	
 	@PutMapping(value = "user-accounts")
+	@Transactional(rollbackFor={Exception.class})
 	public ResponseEntity<Object> updateAccounts(@RequestBody UserPaymentAccount userPmtAct) {
 		try {
 			if(userPmtAct !=null) {
 				userPmtAct = userPmtActRepository.save(userPmtAct);
+				
+				UserUpaMaster userUpaMaster = new UserUpaMaster();
+				userUpaMaster.setUpaCd(userPmtAct.getUpaCD());
+				userUpaMaster.setUserId(userPmtAct.getUserId());
+				userUpaMaster.setUserUpaMstrId(userPmtAct.getUserId()+"_"+userPmtAct.getUpaCD());
+				userUpaMaster = userUpaMastRepository.save(userUpaMaster);
+				
+				
+				UserActUpaMapping userActUpaMapping = new UserActUpaMapping();
+				userActUpaMapping.setUserPymtAcctId(userPmtAct.getUserPmtActId());
+				userActUpaMapping.setUserUPAMstrId(userUpaMaster.getUserUpaMstrId());
+				userActUpaMapping = userActUpaMapRepository.save(userActUpaMapping);
 			}else {
 				return (ResponseEntity<Object>) ResponseEntity.badRequest();
 			}

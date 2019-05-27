@@ -44,6 +44,7 @@ export class UserEntity{
 export class UserPmtAccount{
     id: any;
     userId: any;
+    userPmtActId : any;
     upaCD: any;
     accountType: any;
     shortName: any;
