@@ -14,7 +14,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().disable().authorizeRequests().regexMatchers("/").permitAll();
 	}
 	public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
+        registry.addMapping("/**").allowedOrigins("http://ec2-3-17-234-174.us-east-2.compute.amazonaws.com:9090/hackathon")
                 .allowedMethods("*");
     }
 	
