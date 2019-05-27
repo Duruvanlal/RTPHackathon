@@ -121,6 +121,13 @@ public class OracleService {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.add(AUTH, BEARER + token);
+		headers.setAccessControlAllowOrigin("*");
+		List<HttpMethod> allowedMethods=new ArrayList<>();
+		allowedMethods.add(HttpMethod.GET);
+		allowedMethods.add(HttpMethod.POST);
+		allowedMethods.add(HttpMethod.OPTIONS);
+		allowedMethods.add(HttpMethod.PATCH);
+		headers.setAccessControlAllowMethods(allowedMethods);
 		LOGGER.info("RtpRfp Request:::{}", rfpDto);
 		HttpEntity<RtpRfpDTO> request = new HttpEntity<RtpRfpDTO>(rfpDto, headers);
 		RestTemplate restTemplate = new RestTemplate();
