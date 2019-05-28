@@ -41,6 +41,7 @@ import { ModalModule } from 'ngx-bootstrap';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { NewAccountComponent } from './pages/new-account/new-account.component';
+import { CustomerComponent } from './pages/customer/customer.component';
 
 
 @NgModule({
@@ -64,6 +65,7 @@ import { NewAccountComponent } from './pages/new-account/new-account.component';
     ReceivablesComponent,
     DashboardComponent,
     NewAccountComponent,
+    CustomerComponent,
   ],
   imports: [
     CommonModule,

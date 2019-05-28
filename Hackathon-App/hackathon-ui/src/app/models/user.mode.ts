@@ -66,6 +66,12 @@ export class UPAMaster{
 
 }
 
+export class InvoiceCustomer{
+    id : any;
+    userId : any;
+    upaCd : any;
+}
+
 export class Token{
     jwtToken : any;
 }

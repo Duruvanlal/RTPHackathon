@@ -9,7 +9,8 @@ import { NewCustomerComponent } from './pages/add-new-customer/add.new.customer.
 import {PayablesComponent} from './pages/payables/payables.component';
 import {ReceivablesComponent} from './pages/receivables/receivables.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import {NewAccountComponent} from './pages/new-account/new-account.component'
+import {NewAccountComponent} from './pages/new-account/new-account.component';
+import {CustomerComponent} from './pages/customer/customer.component';
 
 
 export const routes: Routes = [
@@ -21,6 +22,7 @@ export const routes: Routes = [
     component: PagesComponent,
     children:[
           { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+          { path: 'customers', component:  CustomerComponent},
           { path: 'accounts', component:  AccountsComponent},
           { path: 'new-account', component:  NewAccountComponent},
           { path: 'invoices', component: InvoicesComponent},

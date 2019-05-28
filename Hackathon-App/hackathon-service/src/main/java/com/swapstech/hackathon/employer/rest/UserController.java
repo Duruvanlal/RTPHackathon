@@ -22,6 +22,7 @@ import com.swapstech.hackathon.employer.model.Address;
 //import com.swapstech.hackathon.employer.model.Company;
 import com.swapstech.hackathon.employer.model.Contractor;
 import com.swapstech.hackathon.employer.model.EntityMaster;
+import com.swapstech.hackathon.employer.model.InvoiceCustomer;
 import com.swapstech.hackathon.employer.model.User;
 import com.swapstech.hackathon.employer.model.UserActUpaMapping;
 import com.swapstech.hackathon.employer.model.UserPaymentAccount;
@@ -29,6 +30,7 @@ import com.swapstech.hackathon.employer.model.UserType;
 import com.swapstech.hackathon.employer.model.UserUpaMaster;
 import com.swapstech.hackathon.employer.repository.AddressRepository;
 import com.swapstech.hackathon.employer.repository.EntityRepository;
+import com.swapstech.hackathon.employer.repository.InvoiceCustomerRepository;
 import com.swapstech.hackathon.employer.repository.UserActUpaMapRepository;
 import com.swapstech.hackathon.employer.repository.UserPmtActRepository;
 //import com.swapstech.hackathon.employer.repository.AddressRepository;
@@ -60,6 +62,9 @@ public class UserController {
 	
 	@Autowired
 	UserPmtActRepository userPmtActRepository;
+	
+	@Autowired
+	InvoiceCustomerRepository invoiceCustomerRepository;
 
 	@PostMapping(value = "login")
 	public ResponseEntity<Object> login(@RequestBody LoginUserRequest user) {
@@ -219,6 +224,20 @@ public class UserController {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return ResponseEntity.ok(userUpaMaster);
+	}
+	
+	@GetMapping(value = "invoice-customers/{userId}")
+	public ResponseEntity<List<InvoiceCustomer>> getInvoiceCustomers(@PathVariable ("userId") String userId) {
+	
+		List<InvoiceCustomer> invoiceCustomers = new ArrayList<InvoiceCustomer>();
+		
+		try {	
+			invoiceCustomers = invoiceCustomerRepository.findByUserId(userId);
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return ResponseEntity.ok(invoiceCustomers);
 	}
 
 }
