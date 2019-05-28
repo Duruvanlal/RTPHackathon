@@ -1,0 +1,182 @@
+<div class="row">
+
+    <div class="col-md-4">
+        <mat-card>
+            <mat-card-title class="text-secondary"> REGISTER ACCOUNTS
+                <div>
+                    <button type="button" (click)="newAccount()" class="btn btn-primary">
+                        Register </button>
+                </div>
+            </mat-card-title>
+        </mat-card>
+    </div>
+
+    <div class="col-md-4">
+        <mat-card>
+            <mat-card-title class="text-secondary"> YODLEE ACCOUNTS 
+                <!-- <div id="container-fastlink">
+                            <div>
+                                <input type="submit" id="btn-fastlink" class="btn btn-primary" value="Link Account">
+                                    <input type="text" id="token" style="visibility: hidden">
+                            </div>
+                        </div> -->
+                <div>
+                    <button type="button" id="btn-fastlink" class="btn btn-primary" data-toggle="modal" data-target="#itMyModal">
+                        Link Account</button>
+                </div>
+            </mat-card-title>
+        </mat-card>
+    </div>
+
+    <div class="col-md-4">
+            <mat-card>
+                <mat-card-title class="text-secondary">GENERATE UPA CODE 
+                    <div>
+                        <button type="button" (click)="generateUPA()" class="btn btn-primary">
+                            Create </button>
+                    </div>
+                </mat-card-title>
+            </mat-card>
+        </div>
+    
+
+</div>
+<!-- style="text-align: center;"-->
+<mat-card class="mt-3">
+    <mat-card-title class="text-secondary"> Chart of Accounts</mat-card-title>
+    <div class="input-group mt-3">
+        <span class="input-group-prepend">
+            <span class="input-group-text">
+                <i class="fa fa-search"></i>
+            </span>
+        </span>
+        <input class="form-control" type="text" (keyup)="updateFilter($event)" placeholder="Search by account name / account type / account number .."
+        />
+
+    </div>
+    <ngx-datatable class="material mt-2" [rows]="rows" [loadingIndicator]="loadingIndicator" [columns]="columns" [columnMode]="'force'"
+        [limit]="10" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [reorderable]="reorderable">
+    </ngx-datatable>
+    <ng-template #editpayment let-row="row" let-value="value">
+        <i *ngIf="!isValidString(row.upaCD)" (click)="action(row)"
+        class="fa fa-plus text-primary cursor-pointer"> Link UPA </i>
+        <i *ngIf="isValidString(row.upaCD)" class="text-primary cursor-pointer">{{row.upaCD}} </i>
+    </ng-template>
+</mat-card>
+
+
+<div id="itMyModal" class="modal fade" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="close-button">
+                    <button type="button" (click)="linkAccounts()" data-dismiss="modal" aria-label="Close" class="close">
+                        <span aria-hidden="true"></span>
+                        <b>&#x2715;</b>
+                    </button>
+                </div>
+                <div class="embed-responsive embed-responsive-4by3">
+                    <div id="container-fastlink"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div bsModal #createUPAModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1"
+  [config]="{backdrop: true, keyboard: false,ignoreBackdropClick:true}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header" style="display: block;">
+        <h4 id="dialog-sizes-name1" class="modal-title pull-left">Create UPA</h4>
+        <button type="button" class="close pull-right" (click)="closeUpaModel()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+            <div class="row col-md-12">
+                    <div class="col-md-6">
+                            <mat-form-field>
+                                    <input placeholder="Enter UPA"  name="upa"
+                                        matInput
+                                        required
+                                        [(ngModel)]="selectedUPA"> 
+                                </mat-form-field>
+                            
+                    </div>
+                    <div class="col-md-6">
+                            <button class="btn btn-success mt-2" (click)="createUPA()">
+                                    <span aria-hidden="true"></span>
+                                   Create
+                                </button>
+                    </div>
+                       
+                </div>
+          <table class="table table-striped">          
+              <tr>
+                  <th>#</th>
+                <th> Existing UPA Id(s) </th>
+              </tr>
+              <tr *ngFor="let row of upaMaster; let i = index">
+                        <td>{{ i+1 }} </td>
+                       <td >{{row.upaCd}}</td>
+                     </tr>       
+          </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #linkUPAModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1"
+  [config]="{backdrop: true, keyboard: false,ignoreBackdropClick:true}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header" style="display: block;">
+        <h4 id="dialog-sizes-name1" class="modal-title pull-left">Link UPA</h4>
+        <button type="button" class="close pull-right" (click)="closeLinkUPA()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+            <div class="row col-md-12">
+                    <div class="col-md-6">
+                            <ng-select  [items]="upaMaster" 
+                            [multiple]="false" [clearable]="false"
+                            bindLabel="upaCd" bindValue="upaCd" 
+                            [(ngModel)]="linkUPAId"
+                             placeholder="Select">
+                            </ng-select>
+                            
+                    </div>
+                    <div class="col-md-6">
+                            <button class="btn btn-success mt-2" (click)="linkUPA()">
+                                    <span aria-hidden="true"></span>
+                                   Link
+                                </button>
+                    </div>
+                       
+                </div>
+                <table class="table table-striped">          
+                        <tr>
+                          <th> Account Name </th>
+                          <th> Account Number </th>
+                          <th> Account Type </th>
+                          <th> Routing Number </th>
+                        </tr>
+                        <tr>
+                                 <td>{{selectedUserPmtAccount.accountName}}</td>
+                                 <td> {{selectedUserPmtAccount.accountNumber}} </td>
+                                 <td> {{selectedUserPmtAccount.accountType}} </td>
+                                 <td> {{selectedUserPmtAccount.routingNumber}} </td>
+                               </tr>       
+                    </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Don't delete this-->
+
+<input type="text" id="token" style="visibility: hidden">

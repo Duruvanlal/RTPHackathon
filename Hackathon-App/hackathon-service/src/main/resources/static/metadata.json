@@ -1,0 +1,42 @@
+{
+  "applications": [
+    {
+      "name": "User Admin",
+      "type": "Bank",
+      "description": "User Admin Application",
+      "url": "https://localhost:7610/admin/",
+      "icon": "fa fa-address-book",
+      "modules": [
+        {
+          "name": "Role",
+          "description": "Manage User Role",
+          "entitlements": [
+            {
+              "id": "EDIT_ROLE",
+              "description": "Permission to add, edit, delete"
+            }
+          ]
+        },
+        {
+          "name": "User",
+          "description": "Manage Users",
+          "entitlements": [
+            {
+              "id": "EDIT_INTERNAL_USER",
+              "description": "Edit Internal User"
+            },
+			{
+              "id": "EDIT_CUSTOMER_USER",
+              "description": "Edit Customer User"
+            },
+			{
+              "id": "EDIT_BRANCH_USER",
+              "description": "Edit Branch User"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "widgets": null
+}

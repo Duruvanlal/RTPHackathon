@@ -1,0 +1,222 @@
+<div class="d-flex justify-content-center align-items-center w-100 register-container">
+    <div class="col-xl-8 col-md-6 col-10">
+        <div class="card border-0 box-shadow rounded-0">
+            <div class="card-header d-flex justify-content-center align-items-center border-0 box-shadow">
+                <img src="http://www.swapstech.com/images/Header/logo.png" alt="Logo">
+            </div>
+            <div class="card-body text-center pb-1 brd">
+                <h4>Register User</h4>
+                <a routerLink="/login" class="transition">Already have an account? Sign in!</a>
+                <form class="form-horizontal" #form="ngForm" novalidate name="form">
+               
+
+                    <div class="row">
+                        <div class="col-6">
+                            <mat-form-field>
+                                <input placeholder="Company Name" name="companyName"
+                                    matInput
+                                    required
+                                    [(ngModel)]="user.entity.entityName"> 
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <mat-form-field>
+                                <input placeholder="Address 1" name="companyAddress1"
+                                    matInput
+                                    required
+                                    [(ngModel)]="user.entity.entityAddress.address1"> 
+                            </mat-form-field>
+                        </div>
+                        <div class="col-6">
+                            <mat-form-field>
+                                <input placeholder="Address 2" name="companyAddress2"
+                                    matInput
+                                    [(ngModel)]="user.entity.entityAddress.address2"> 
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col-8">
+                                    <mat-form-field>
+                                        <input placeholder="City" name="companyCity"
+                                            matInput
+                                            required
+                                            [(ngModel)]="user.entity.entityAddress.city"> 
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-4">
+                                    <mat-form-field>
+                                        <input placeholder="Postal Code" name="companyPostalCode"
+                                            matInput
+                                            required
+                                            [(ngModel)]="user.entity.entityAddress.postalCode"> 
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <mat-form-field>
+                                <input placeholder="State" name="companyState"
+                                    matInput
+                                    required
+                                    [(ngModel)]="user.entity.entityAddress.state"> 
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <mat-form-field>
+                                <input placeholder="Country" name="companyCountry"
+                                    matInput
+                                    required
+                                    [(ngModel)]="user.entity.entityAddress.country"> 
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <hr/>
+                <div class="row">
+                    <div class="col-6">
+                        <mat-form-field>
+                            <input placeholder="User Id" name="userName"
+                                matInput
+                                required
+                                [(ngModel)]="user.userName"> 
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <mat-form-field>
+                            <input type="password" placeholder="Password" name="password"
+                                matInput
+                                required
+                                [(ngModel)]="user.password"> 
+                        </mat-form-field>
+                    </div>
+                    <div class="col-6">
+                        <mat-form-field>
+                            <input type="password" placeholder="Password" name="rePassword"
+                                matInput
+                                required
+                                [(ngModel)]="user.rePassword"> 
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <mat-form-field>
+                            <input type="text" placeholder="First Name" name="firstName"
+                                matInput
+                                required
+                                [(ngModel)]="user.firstName"> 
+                        </mat-form-field>
+                    </div>
+                    <div class="col-6">
+                        <mat-form-field>
+                            <input type="text" placeholder="Last Name" name="lastName"
+                                matInput
+                                required
+                                [(ngModel)]="user.lastName"> 
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <mat-form-field>
+                            <input type="text" placeholder="Phone Number" name="phone"
+                                matInput
+                                [(ngModel)]="user.phone"> 
+                        </mat-form-field>
+                    </div>
+                    <div class="col-6">
+                        <mat-form-field>
+                            <input type="text" placeholder="Email" name="email"
+                                matInput
+                                [(ngModel)]="user.email"> 
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                        <div class="col text-left">
+                            <mat-checkbox name="addressSameAsCompany" [(ngModel)]="addressSameAsCompany">Address same as Company !</mat-checkbox>
+                        </div>
+                </div>
+                <!-- USER ADDRESS -->
+                <div *ngIf="!addressSameAsCompany">
+                <div class="row">
+                    <div class="col-6">
+                        <mat-form-field>
+                            <input placeholder="Address 1" name="Address1"
+                                matInput
+                                required
+                                [(ngModel)]="user.address.address1"> 
+                        </mat-form-field>
+                    </div>
+                    <div class="col-6">
+                        <mat-form-field>
+                            <input placeholder="Address 2" name="Address2"
+                                matInput
+                                [(ngModel)]="user.address.address2"> 
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-8">
+                                <mat-form-field>
+                                    <input placeholder="City" name="City"
+                                        matInput
+                                        required
+                                        [(ngModel)]="user.address.city"> 
+                                </mat-form-field>
+                            </div>
+                            <div class="col-4">
+                                <mat-form-field>
+                                    <input placeholder="Postal Code" name="PostalCode"
+                                        matInput
+                                        required
+                                        [(ngModel)]="user.address.postalCode"> 
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <mat-form-field>
+                            <input placeholder="State" name="State"
+                                matInput
+                                required
+                                [(ngModel)]="user.address.state"> 
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <mat-form-field>
+                            <input placeholder="Country" name="Country"
+                                matInput
+                                required
+                                [(ngModel)]="user.address.country"> 
+                        </mat-form-field>
+                    </div>
+                </div>
+      
+                </div>
+                <!-- Register Button -->
+                <div class="row">
+                    <div class="col">
+                        <button type="submit" class="btn btn-primary" (click)="registerEntity(form)">Register</button>
+                    </div>
+                </div>
+            </form>
+                <br>
+            </div>
+            <br><br>
+<br><br>
+        </div>
+    </div>
+</div>
