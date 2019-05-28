@@ -73,16 +73,27 @@ public class ZillTransactionService {
 	
 	public ZillTransaction makeRfpAction(RfpAction action) {
 		ZillTransaction txn = null;
+		RtpRfpDTO rtpRfpDTO=null;
+		ZillTransactionDetails txnDetails=new ZillTransactionDetails();
 		if (action != null) {
 			txn=getZillTransactionByReasonRefId(action.getReferenceId());
 			if (action.getAction() != null
 					&& action.getAction().name().equalsIgnoreCase(RfpResponseEnum.APPROVE.name())) {
-				oracleService.approveRfp(txn);
+				rtpRfpDTO=oracleService.approveRfp(txn);
+				txnDetails=detailsRepository.getZillTransactionDetailByTransCd(txn.getPaymentTransCode());
+				txnDetails.setTransStatus(ZillTransactionStatus.APPROVED.name());
+				detailsRepository.updateZillTransactionDetails(txnDetails);
 			} else {
-				oracleService.rejectRfp(txn);
+				rtpRfpDTO=oracleService.rejectRfp(txn);
 			}
+			txnDetails=detailsRepository.getZillTransactionDetailByTransCd(txn.getPaymentTransCode());
+			txnDetails.setTransStatus(ZillTransactionStatus.REJECTED.name());
+			txnDetails.setTransErrorDesc(action.getRejectReason());
+			detailsRepository.updateZillTransactionDetails(txnDetails);
 		}
-
+		if (rtpRfpDTO != null) {
+			
+		}
 		return txn;
 	}
 	
