@@ -132,7 +132,7 @@ export class AccountsComponent implements OnInit, AfterViewInit {
       { name: 'Account Number', prop: 'accountNumber' },
       { name: 'Routing Number', prop: 'routingNumber' },
     ];
-    this.columns.push({ name: 'UPA', cellTemplate: this.editpayment });
+    this.columns.push({ name: 'Link UPA', cellTemplate: this.editpayment });
 
     this.loadingIndicator = false;
     document.getElementById("token").value = this.yoddleToken;
