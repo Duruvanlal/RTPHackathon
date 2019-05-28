@@ -3,6 +3,7 @@ import { trigger,  state,  style, transition, animate } from '@angular/animation
 import { AppSettings } from '../../../app.settings';
 import { Settings } from '../../../app.settings.model';
 import { MenuService } from '../menu/menu.service';
+import {User} from './../../../models/user.mode';
 
 @Component({
   selector: 'app-header',
@@ -24,9 +25,11 @@ export class HeaderComponent implements OnInit {
   public showInfoContent:boolean = false;
   public settings: Settings;
   public menuItems:Array<any>;
+  public currentUser : User;
   constructor(public appSettings:AppSettings, public menuService:MenuService) {
       this.settings = this.appSettings.settings;
       this.menuItems = this.menuService.getHorizontalMenuItems();
+      this.currentUser = JSON.parse(localStorage.getItem('user'));
   }
   
   ngOnInit() {

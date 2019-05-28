@@ -1,7 +1,7 @@
 import { Injectable, Renderer2 } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { GlobalProperty } from '../../global';
-import { User,Token,UserPmtAccount,UPAMaster } from './../models/user.mode';
+import { User,Token,UserPmtAccount,UPAMaster,InvoiceCustomer } from './../models/user.mode';
 import {InvoiceMaster,InvoiceDetail} from './../models/invoice.mode';
 import { Subject, BehaviorSubject, Observable, of, concat } from 'rxjs';
 import { Router } from '@angular/router';
@@ -67,6 +67,9 @@ export class UserService {
   }
 
 
+  public getInvoiceCustomers(userId): Observable<InvoiceCustomer[]> {
+    return this.http.get<InvoiceCustomer[]>(this.global.url + "invoice-customers/"+userId);
+  }
 
   public postZillTransaction(data) {
     return this.http.post(this.global.zillPayUrl + "zill/transactions", data);

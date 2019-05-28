@@ -7,6 +7,7 @@ import { Menu } from './menu.model';
 export const verticalMenuItems = [ 
     new Menu (9, 'Dashboard', '/pages/dashboard', null, 'dashboard', null, false, 0),
     new Menu (4, 'Accounts', '/pages/accounts', null, 'bank', null, false, 0),
+    new Menu (10, 'Customers', '/pages/customers', null, 'user', null, false, 0),
   //  new Menu (1, 'Invoice', '/pages/invoices', null, 'bank', null, false, 0),
     new Menu (5, 'Invoice', null, null, 'file-text-o', null, true, 0) ,
   //  new Menu (6, 'New Invoice', '/pages/new/invoice', null, 'plus-circle', null, false, 5),  

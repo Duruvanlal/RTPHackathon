@@ -2,7 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { GlobalProperty } from '../../../global';
 import { UserService } from '../../services/user.service';
 import { InvoiceMaster, InvoiceDetail,RTPRequest } from '../../models/invoice.mode';
-import { User,UserPmtAccount } from './../../models/user.mode';
+import { User,UserPmtAccount,InvoiceCustomer } from './../../models/user.mode';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { formatDate } from "@angular/common";
@@ -23,7 +23,7 @@ export class NewInvoiceComponent implements OnInit {
   public user: any;
   public userList: User[] = [];
   public userPmtAccountList : UserPmtAccount[]=[];
-  public receiverPmtAccountList : UserPmtAccount[]=[];
+  public receiverPmtAccountList : UserPmtAccount[]=[]; // UserPmtAccount
   public sender = new User();
   public receiver = new User();
   public dueDate: any;
