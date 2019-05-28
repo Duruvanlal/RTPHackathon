@@ -19,6 +19,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.swapstech.hackathon.common.model.AccountActivity;
+import com.swapstech.hackathon.common.model.AccountBalance;
 import com.swapstech.hackathon.common.model.AlertDTO;
 import com.swapstech.hackathon.common.model.AlertList;
 import com.swapstech.hackathon.common.model.CurrencyAmount;
@@ -326,6 +327,38 @@ public class OracleService {
 			
 		}
 		return items;
+		
+	}
+	
+	public AccountBalance getBalance(String acctNum) {
+		UserPaymentAccount account = userAcctService.findByAccountNumber(acctNum);
+		String token=null;
+		AccountBalance balance=null; 
+		if (account != null && StringUtils.isNotBlank(account.getUserId())) {			
+			User user = userAcctService.findByUserId(account.getUserId());
+			if (user != null) {
+				token = getToken(user.getUserId(), user.getPassword());
+			}
+			String url = ApiUrlConstants.RTP_ACCOUNTS_URL+acctNum;
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.add(AUTH, BEARER + token);
+			
+			RestTemplate restTemplate = new RestTemplate();
+			HttpEntity request = new HttpEntity(headers);
+			balance=new AccountBalance();
+			ResponseEntity<AccountBalance> response = restTemplate.exchange(url, HttpMethod.GET, request, AccountBalance.class);
+			if (response != null && response.getBody() != null) {
+				if (StringUtils.isNotBlank(response.getBody().getStatus().getResult())
+						&& "SUCCESSFUL".equalsIgnoreCase(response.getBody().getStatus().getResult())) {
+					balance = response.getBody();
+					LOGGER.info("getBalance:{}",balance);
+					
+				}
+			}
+			
+		}
+		return balance;
 		
 	}
 

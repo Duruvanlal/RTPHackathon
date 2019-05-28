@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.swapstech.hackathon.common.model.AccountActivity;
+import com.swapstech.hackathon.common.model.AccountBalance;
 import com.swapstech.hackathon.common.model.RfpAction;
 import com.swapstech.hackathon.common.model.RfpResponseEnum;
 import com.swapstech.hackathon.common.model.RtpRfpDTO;
@@ -87,5 +88,9 @@ public class ZillTransactionService {
 	
 	public List<TransactionItem> getRtpTransactions(String acctNumber){
 		return oracleService.getRtpTransactions(acctNumber);
+	}
+	
+	public AccountBalance getAcctBalance(String acctNumber){
+		return oracleService.getBalance(acctNumber);
 	}
 }
