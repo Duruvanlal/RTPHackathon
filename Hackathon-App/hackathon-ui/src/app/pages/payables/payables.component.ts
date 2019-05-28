@@ -63,12 +63,13 @@ export class PayablesComponent implements OnInit {
 
     this.userService.postRfpReq(rfpRequest).subscribe(
       res=>{
-
+        this.toastrService.success('Approval done');
       },error =>{
-        
+        this.toastrService.error('Error in Approval process');
       }
     );
     this.reasonForAction = '';
+    this.userService.refresh();
   }
 
   rejectInvoice() {
@@ -82,12 +83,13 @@ export class PayablesComponent implements OnInit {
 
         this.userService.postRfpReq(rfpRequest).subscribe(
           res=>{
-
+            this.toastrService.success('Invoice has rejected');
           },error =>{
-
+            this.toastrService.error('Error in rejection process');
           }
         );
         this.reasonForAction = '';
+        this.userService.refresh();
     } else {
       this.toastrService.info('Reject reason is required');
     }
