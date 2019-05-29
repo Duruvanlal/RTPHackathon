@@ -45,13 +45,13 @@ export class LoginComponent {
       },error=>{this.spinner.hide();});
     }
 
-    // this.userService.getYodleeToken().subscribe(
-    //   (res)=>{
-    //     localStorage.setItem('yoddleToken', res.jwtToken);
-    //   },(error) =>{
-    //     localStorage.setItem('yoddleToken', null);
-    //   }
-    // );
+    this.userService.getYodleeToken().subscribe(
+      (res)=>{
+        localStorage.setItem('yoddleToken', res.jwtToken);
+      },(error) =>{
+        localStorage.setItem('yoddleToken', null);
+      }
+    );
   }
 
 
