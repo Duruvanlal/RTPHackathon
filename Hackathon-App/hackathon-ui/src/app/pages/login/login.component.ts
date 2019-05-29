@@ -32,7 +32,8 @@ export class LoginComponent {
   public login(form: NgForm){
     if(form.valid){
       this.spinner.show();
-      this.userService.login(this.user).subscribe((response)=>{
+       this.router.navigate(['/pages']);
+    /*  this.userService.login(this.user).subscribe((response)=>{
         if(response && response != null){
           localStorage.setItem('user', JSON.stringify(response));
           this.global.principal = JSON.stringify(response);
@@ -42,16 +43,10 @@ export class LoginComponent {
           this.router.navigate(['/pages']);
         }
         this.spinner.hide();
-      },error=>{this.spinner.hide();});
+      },error=>{this.spinner.hide();});*/
     }
 
-    this.userService.getYodleeToken().subscribe(
-      (res)=>{
-        localStorage.setItem('yoddleToken', res.jwtToken);
-      },(error) =>{
-        localStorage.setItem('yoddleToken', null);
-      }
-    );
+  
   }
 
 
