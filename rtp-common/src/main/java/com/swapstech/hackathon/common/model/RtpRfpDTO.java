@@ -4,9 +4,15 @@
 package com.swapstech.hackathon.common.model;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import javax.persistence.Convert;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.swapstech.hackathon.common.repository.util.LocalDateTimeAttributeConverter;
 
 /**
  * @author Duruvanlal TJ
@@ -25,6 +31,7 @@ private static final long serialVersionUID = 7887612552844518073L;
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	String externalReferenceId;
 	String systemReferenceNo;
+	
 	String valueDate;
 	String instructionId;
 	public ValueObject getCreditAccountId() {
