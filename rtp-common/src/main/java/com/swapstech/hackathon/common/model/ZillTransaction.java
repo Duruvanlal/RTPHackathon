@@ -8,12 +8,17 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.swapstech.hackathon.common.repository.util.LocalDateTimeAttributeConverter;
 
 /**
  * @author Duruvanlal TJ
@@ -44,6 +49,9 @@ public class ZillTransaction implements Serializable{
 	@Column(name = "CREATED_BY", nullable=false)
 	String createdBy;
 	@Column(name = "CREATED_DT", nullable=false)
+	@Convert(converter = LocalDateTimeAttributeConverter.class)
+	@JsonDeserialize(using = JsonLocalDateTimeDeserializer.class)
+	@JsonSerialize(using = JsonLocalDateTimeSerializer.class)
 	LocalDateTime createdDt;
 	@Column(name = "instruction_id", nullable=false)
 	String instructionId;

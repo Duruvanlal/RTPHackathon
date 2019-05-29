@@ -1,6 +1,8 @@
 
 package com.swapstech.hackathon.common.service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +25,7 @@ import com.swapstech.hackathon.common.model.AccountBalance;
 import com.swapstech.hackathon.common.model.AlertDTO;
 import com.swapstech.hackathon.common.model.AlertList;
 import com.swapstech.hackathon.common.model.CurrencyAmount;
+import com.swapstech.hackathon.common.model.RfpApprovalResponse;
 import com.swapstech.hackathon.common.model.RfpResponse;
 import com.swapstech.hackathon.common.model.RtpRfpDTO;
 import com.swapstech.hackathon.common.model.TokenResponseDTO;
@@ -95,7 +98,7 @@ public class OracleService {
 			User creditor = userAcctService.findByUserId(requestorAccount.getUserId());
 			if (creditor != null) {
 				rfpDto.setCreditorName(creditor.getUserName());
-				rfpDto.setAgentMemId(creditor.getAgentMemberId());
+				
 				userId = creditor.getUserId();
 				pwd = creditor.getPassword();
 			}
@@ -109,6 +112,7 @@ public class OracleService {
 			User payer = userAcctService.findByUserId(approverAccount.getUserId());
 			if (payer != null) {
 				rfpDto.setDebtorName(payer.getUserName());
+				rfpDto.setAgentMemId(payer.getAgentMemberId());
 			}
 		}
 		//ZillTransactionDetails transDetails = transDetailsService.getZillTransactionDetailByTransCd(transaction.getPaymentTransCode());
@@ -216,6 +220,9 @@ public class OracleService {
 			rfpDto.setAmount(currencyAmount);
 		}
 		String token = getToken(userId, pwd);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        String formatDateTime = transaction.getCreatedDt().format(formatter);
+		rfpDto.setValueDate(formatDateTime);
 		rfpDto.setSystemReferenceNo(transaction.getRtpTransId());
 		rfpDto.setInstructionId(getInstructionId(transaction.getRtpTransId(), token));
 		HttpHeaders headers = new HttpHeaders();
@@ -224,12 +231,12 @@ public class OracleService {
 		LOGGER.info("RtpRfp Approve Request:::{}", rfpDto);
 		HttpEntity<RtpRfpDTO> request = new HttpEntity<RtpRfpDTO>(rfpDto, headers);
 		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<RfpResponse> response = restTemplate.postForEntity(url, request, RfpResponse.class);
+		ResponseEntity<RfpApprovalResponse> response = restTemplate.postForEntity(url, request, RfpApprovalResponse.class);
 		RtpRfpDTO rtpRfpDTO = null;
 		if (response != null && response.getBody() != null) {
 			if (StringUtils.isNotBlank(response.getBody().getStatus().getResult())
 					&& "SUCCESSFUL".equalsIgnoreCase(response.getBody().getStatus().getResult())) {
-				rtpRfpDTO = response.getBody().getUsDomesticPayinInstructionDTO();
+				rtpRfpDTO = response.getBody().getPayinDetails();
 			}
 		}
 		LOGGER.info("RtpRfp Approve Response:::{}", rtpRfpDTO);
@@ -251,9 +258,7 @@ public class OracleService {
 			User creditor = userAcctService.findByUserId(requestorAccount.getUserId());
 			if (creditor != null) {
 				rfpDto.setCreditorName(creditor.getUserName());
-				rfpDto.setAgentMemId(creditor.getAgentMemberId());
-				userId = creditor.getUserId();
-				pwd = creditor.getPassword();
+
 			}
 		}
 		rfpDto.setCreditAccountId(creditAccount);
@@ -265,6 +270,9 @@ public class OracleService {
 			User payer = userAcctService.findByUserId(approverAccount.getUserId());
 			if (payer != null) {
 				rfpDto.setDebtorName(payer.getUserName());
+				rfpDto.setAgentMemId(payer.getAgentMemberId());
+				userId = payer.getUserId();
+				pwd = payer.getPassword();
 			}
 		}
 		ZillTransactionDetails transDetails = transDetailsService
@@ -276,6 +284,9 @@ public class OracleService {
 			rfpDto.setAmount(currencyAmount);
 		}
 		String token = getToken(userId, pwd);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        String formatDateTime = transaction.getCreatedDt().format(formatter);
+		rfpDto.setValueDate(formatDateTime);
 		rfpDto.setSystemReferenceNo(transaction.getRtpTransId());
 		rfpDto.setInstructionId(getInstructionId(transaction.getRtpTransId(), token));
 		HttpHeaders headers = new HttpHeaders();
@@ -284,12 +295,12 @@ public class OracleService {
 		LOGGER.info("RtpRfp Reject Request:::{}", rfpDto);
 		HttpEntity<RtpRfpDTO> request = new HttpEntity<RtpRfpDTO>(rfpDto, headers);
 		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<RfpResponse> response = restTemplate.postForEntity(url, request, RfpResponse.class);
+		ResponseEntity<RfpApprovalResponse> response = restTemplate.postForEntity(url, request, RfpApprovalResponse.class);
 		RtpRfpDTO rtpRfpDTO = null;
 		if (response != null && response.getBody() != null) {
 			if (StringUtils.isNotBlank(response.getBody().getStatus().getResult())
 					&& "SUCCESSFUL".equalsIgnoreCase(response.getBody().getStatus().getResult())) {
-				rtpRfpDTO = response.getBody().getUsDomesticPayinInstructionDTO();
+				rtpRfpDTO = response.getBody().getPayinDetails();
 			}
 		}
 		LOGGER.info("RtpRfp Reject Response:::{}", rtpRfpDTO);

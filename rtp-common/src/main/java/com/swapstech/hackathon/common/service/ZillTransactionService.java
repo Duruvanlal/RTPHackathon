@@ -2,6 +2,8 @@
  * 
  */
 package com.swapstech.hackathon.common.service;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Random;
 
@@ -61,6 +63,9 @@ public class ZillTransactionService {
 		detailsRepository.createZillTransactionDetails(txnDetails);
 		RtpRfpDTO rfpTxn=oracleService.makeRfpRequest(newZillTransaction);
 		newZillTransaction.setRtpTransId(rfpTxn.getSystemReferenceNo());
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        LocalDateTime formatDateTime = LocalDateTime.parse(rfpTxn.getValueDate(), formatter);
+		newZillTransaction.setCreatedDt(formatDateTime);
 		newZillTransaction=updateZillTransaction(newZillTransaction);
 		txnDetails.setTransStatus(ZillTransactionStatus.TRANSMITTED.name());
 		detailsRepository.updateZillTransactionDetails(txnDetails);
@@ -82,18 +87,19 @@ public class ZillTransactionService {
 				rtpRfpDTO=oracleService.approveRfp(txn);
 				txnDetails=detailsRepository.getZillTransactionDetailByTransCd(txn.getPaymentTransCode());
 				txnDetails.setTransStatus(ZillTransactionStatus.APPROVED.name());
-				detailsRepository.updateZillTransactionDetails(txnDetails);
+				
 			} else {
 				rtpRfpDTO=oracleService.rejectRfp(txn);
+				txnDetails=detailsRepository.getZillTransactionDetailByTransCd(txn.getPaymentTransCode());
+				txnDetails.setTransStatus(ZillTransactionStatus.REJECTED.name());
+				txnDetails.setTransErrorDesc(action.getRejectReason());
 			}
-			txnDetails=detailsRepository.getZillTransactionDetailByTransCd(txn.getPaymentTransCode());
-			txnDetails.setTransStatus(ZillTransactionStatus.REJECTED.name());
-			txnDetails.setTransErrorDesc(action.getRejectReason());
-			detailsRepository.updateZillTransactionDetails(txnDetails);
-		}
-		if (rtpRfpDTO != null) {
+			if (rtpRfpDTO!= null && rtpRfpDTO.getSystemReferenceNo().equalsIgnoreCase(txn.getRtpTransId())) {
+				detailsRepository.updateZillTransactionDetails(txnDetails);
+			}
 			
 		}
+		
 		return txn;
 	}
 	
