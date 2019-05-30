@@ -27,6 +27,7 @@ import com.swapstech.hackathon.common.model.AlertList;
 import com.swapstech.hackathon.common.model.CurrencyAmount;
 import com.swapstech.hackathon.common.model.RfpApprovalResponse;
 import com.swapstech.hackathon.common.model.RfpResponse;
+import com.swapstech.hackathon.common.model.RfpResponseEnum;
 import com.swapstech.hackathon.common.model.RtpRfpDTO;
 import com.swapstech.hackathon.common.model.TokenResponseDTO;
 import com.swapstech.hackathon.common.model.TransactionItem;
@@ -37,6 +38,7 @@ import com.swapstech.hackathon.common.model.UserUpaMaster;
 import com.swapstech.hackathon.common.model.ValueObject;
 import com.swapstech.hackathon.common.model.ZillTransaction;
 import com.swapstech.hackathon.common.model.ZillTransactionDetails;
+import com.swapstech.hackathon.common.model.ZillTransactionStatus;
 import com.swapstech.hackathon.common.repository.UserAcctUpaMappingRepository;
 import com.swapstech.hackathon.common.repository.UserPymtAcctRepository;
 import com.swapstech.hackathon.common.repository.UserUpaMasterRepository;
@@ -411,8 +413,11 @@ public class OracleService {
 		String token = getToken(userId, pwd);
 		String instructionId = getInstructionId(transaction.getRtpTransId(), token);
 		LOGGER.info("checkRfpStatus Response:::{}", instructionId);
-		if (StringUtils.isNotBlank(instructionId)) {
-			isRfpTransmitted = true;
+		ZillTransactionDetails txnDetails=transDetailsService.getZillTransactionDetailByTransCd(transaction.getPaymentTransCode());
+		if (StringUtils.isNotBlank(instructionId) && null !=txnDetails && StringUtils.isNotBlank(txnDetails.getTransStatus())) {
+			if (StringUtils.isNotBlank(instructionId) && ZillTransactionStatus.TRANSMITTED.name().equalsIgnoreCase(txnDetails.getTransStatus())) {
+				isRfpTransmitted = true;
+			}
 		}
 		return isRfpTransmitted;
 	}
