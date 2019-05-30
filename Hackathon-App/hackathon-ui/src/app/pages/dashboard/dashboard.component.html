@@ -10,13 +10,13 @@
 
         <div class="col-md-12 cursor-pointer" (click)="gotToPayables()">
             <div class="col-md-12"><div class="dashboard-card bg-rred order-card"><div class="card-block"><h4 class="">Payables</h4><p class="mt-4">
-              </p><h2 class="text-right"><i class="fa fa-credit-card f-left"></i><span>{{payableCount}}</span></h2>
+              </p><h4 class="text-right"><i class="fa fa-credit-card f-left"></i><span>{{payableCount | currency:'USD'}}</span></h4>
               <p></p></div></div></div>
         </div>
       
         <div class="col-md-12 mt-4 cursor-pointer" (click)="gotToReceivables()">
             <div class="col-md-12"><div class="dashboard-card bg-primary order-card"><div class="card-block"><h4 class="">Receivables</h4><p class="mt-4">
-              </p><h2 class="text-right"><i class="fa fa-google-wallet f-left"></i><span>{{receivableCount}}</span></h2>
+              </p><h4 class="text-right"><i class="fa fa-google-wallet f-left"></i><span>{{receivableCount | currency:'USD'}}</span></h4>
               <p></p></div></div></div>
         </div>
 
@@ -55,15 +55,31 @@
  
   </div>
 
-  <div class="col-md-8">
+  <div class="col-md-8 mat-card">
+    <mat-card-title style="text-align: center;" class="text-secondary">Payables / Receivables</mat-card-title>
+    <div class="row">
+        <div class="col-md-8">
+            <ngx-charts-pie-chart [view]="view"   [customColors]="customColorsArray"
+            [labels]="true"
+            [doughnut]="true"
+            [results]="receivablesList" [gradient]="gradient" (select)="onSelect($event)">
+           </ngx-charts-pie-chart>
+           <div style="text-align: center;">
+               <h4 style="color: #a8385d">Payables: {{payableCount | currency:'USD'}}</h4>
+               <h4 class="text-primary">Receivables: {{receivableCount | currency:'USD'}}</h4>
+           </div>
 
-    <mat-card>
-        <mat-card-title style="text-align: center;" class="text-secondary">Payables / Receivables</mat-card-title>
-      <ngx-charts-advanced-pie-chart [view]="view"   [customColors]="customColorsArray"
-      [results]="receivablesList" [gradient]="gradient" (select)="onSelect($event)">
-      </ngx-charts-advanced-pie-chart>
+        </div>
+        <div class="col-md-4">
 
-    </mat-card>
+        </div>
+    </div>
+    
+       
+      <!--<ngx-charts-advanced-pie-chart></ngx-charts-advanced-pie-chart> -->
+    
+
+    
 
   </div>
 
