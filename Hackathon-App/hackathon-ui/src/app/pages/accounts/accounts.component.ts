@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserPmtAccount } from './../../models/user.mode';
 import { User,UPAMaster } from './../../models/user.mode';
+import {AccountBalance} from './../../models/invoice.mode';
 import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 
@@ -24,9 +25,11 @@ declare let document: any;
 export class AccountsComponent implements OnInit, AfterViewInit {
 
   @ViewChild('editpayment') public editpayment: TemplateRef<any>;
+  @ViewChild('accountBalance') public accountBalance: TemplateRef<any>;
   @ViewChild('createUPAModal') createUPAModal: ModalDirective;
   @ViewChild('linkUPAModal') linkUPAModal: ModalDirective;
-
+  @ViewChild('showAccBalanceModal') showAccBalanceModal: ModalDirective;
+  
 
   yoddleToken = null;
   rows = [];
@@ -39,6 +42,7 @@ export class AccountsComponent implements OnInit, AfterViewInit {
   selectedUserPmtAccount = new UserPmtAccount();
   selectedUPA : string;
   linkUPAId : any;
+  selectedAccountBalance = new AccountBalance();
   columns = [
   ];
 
@@ -131,6 +135,7 @@ export class AccountsComponent implements OnInit, AfterViewInit {
       { name: 'Account Type', prop: 'accountType' },
       { name: 'Account Number', prop: 'accountNumber' },
       { name: 'Routing Number', prop: 'routingNumber' },
+      { name: 'Account Balance', cellTemplate: this.accountBalance },
     ];
     this.columns.push({ name: 'Link UPA', cellTemplate: this.editpayment });
 
@@ -184,6 +189,25 @@ export class AccountsComponent implements OnInit, AfterViewInit {
     this.linkUPAModal.show();
     this.selectedUserPmtAccount = row;
     console.log('invoiceDetail '+JSON.stringify(this.selectedUserPmtAccount));
+  }
+
+  viewAcctBalance(row){
+    this.spinner.show();
+    this.userService.getAccountBalance(row.accountNumber).subscribe(
+      res => {
+        if(res){
+          this.selectedAccountBalance = res;
+          this.spinner.hide();
+          this.showAccBalanceModal.show();
+        }else{
+          this.spinner.hide();
+          this.toastrService.info('Account Balance info not found');
+        }
+      }, error => {
+        this.spinner.hide();
+        this.toastrService.error('Error while fetching Account Balance');
+      }
+    );
   }
 
   closeLinkUPA(){

@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import {UserService} from './../../services/user.service';
 import {User} from './../../models/user.mode';
+import {InvoiceMaster} from './../../models/invoice.mode';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 
@@ -13,7 +14,7 @@ import { Router } from '@angular/router';
 })
 export class DashboardComponent implements OnInit {
 
-  view: any[] = [750, 400];
+  view: any[] = [650, 300];
   view2: any[] = [400, 200];
   customColorsArray= [];
   showXAxis = true;
@@ -32,11 +33,23 @@ export class DashboardComponent implements OnInit {
     this.currentUser = JSON.parse(localStorage.getItem('user'));
     this.userService.getPayables(this.currentUser.userName).subscribe(
       res =>{
-        this.payableCount = res.length;
+        this.payableCount = 0;
+
+        if(res.length > 0){
+          for(let invMst of res){
+            this.payableCount = this.payableCount + invMst.totalAmount;
+          }
+        }
+         
 
         this.userService.getReceivables(this.currentUser.userName).subscribe(
-          res =>{
-            this.receivableCount = res.length;
+          response =>{
+            this.receivableCount = 0;
+            if(response.length > 0){
+              for(let invMstr of response){
+                this.receivableCount = this.receivableCount + invMstr.totalAmount;
+              }
+            }
             this.receivablesList = [{
               "name": "Payables",
               "value":  this.payableCount
