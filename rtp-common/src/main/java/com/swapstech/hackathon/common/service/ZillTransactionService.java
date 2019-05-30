@@ -110,4 +110,13 @@ public class ZillTransactionService {
 	public AccountBalance getAcctBalance(String acctNumber){
 		return oracleService.getBalance(acctNumber);
 	}
+	
+	public boolean checkRfpStatus(String refId) {
+		boolean isRfpTransmitted=false;
+		ZillTransaction transaction=getZillTransactionByReasonRefId(refId);
+		if (null!=transaction) {
+			isRfpTransmitted=oracleService.checkRfpStatus(transaction);
+		}
+		return isRfpTransmitted;
+	}
 }

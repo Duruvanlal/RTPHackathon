@@ -93,4 +93,10 @@ public class ZillTransactionController {
 		AccountBalance accountBalance =service.getAcctBalance(acctNum);
 		return ResponseEntity.ok(accountBalance);
 	}
+	@GetMapping(value = "/zill/transactions/rfp-approve-eligible/{ref-id}", produces = "application/json")
+	@ApiOperation(value = "RFP Approve Eligible Status", response = Boolean.class)
+	public ResponseEntity<Boolean> getRfpStatus(@PathVariable ("ref-id") String refId) {
+		boolean isEligible =service.checkRfpStatus(refId);
+		return ResponseEntity.ok(isEligible);
+	}
 }
