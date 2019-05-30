@@ -49,8 +49,8 @@ public class User {
 	private String password;
 	
 	@Column(name = "USER_TYPE")
-	@Enumerated(EnumType.STRING)
-	private UserType type = UserType.Employee;
+	//@Enumerated(EnumType.STRING)
+	private String type;
 	
 	@Column(name = "PHONE_NBR")
 	private String phone;
@@ -68,13 +68,16 @@ public class User {
 	private String updatedBy;
 
 	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "ADDESS_ID", referencedColumnName = "id")
+    @JoinColumn(name = "ADDRESS_ID", referencedColumnName = "id")
 	private Address address;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	/*@ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "ENTITY_ID", nullable = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Company company;
+    private Company company;*/
+	
+	@Column(name = "agent_memeber_id")
+	private String agentMemberId;
 	
 	
 	/* @ManyToMany
@@ -133,11 +136,11 @@ public class User {
 		this.password = password;
 	}
 
-	public UserType getType() {
+	public String getType() {
 		return type;
 	}
 
-	public void setType(UserType type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 
@@ -189,13 +192,13 @@ public class User {
 		this.address = address;
 	}
 
-	public Company getCompany() {
+	/*public Company getCompany() {
 		return company;
 	}
 
 	public void setCompany(Company company) {
 		this.company = company;
-	}
+	}*/
 
 	public String getMiddleName() {
 		return middleName;
@@ -219,6 +222,23 @@ public class User {
 
 	public void setContractorList(List<Contractor> contractorList) {
 		this.contractorList = contractorList;
+	}
+
+	public String getAgentMemberId() {
+		return agentMemberId;
+	}
+
+	public void setAgentMemberId(String agentMemberId) {
+		this.agentMemberId = agentMemberId;
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", userId=" + userId + ", userName=" + userName + ", firstName=" + firstName
+				+ ", middleName=" + middleName + ", lastName=" + lastName + ", password=" + password + ", type=" + type
+				+ ", phone=" + phone + ", email=" + email + ", status=" + status + ", createdBy=" + createdBy
+				+ ", updatedBy=" + updatedBy + ", address=" + address + ", agentMemberId="
+				+ agentMemberId + ", contractorList=" + contractorList + "]";
 	}
 	
 	
