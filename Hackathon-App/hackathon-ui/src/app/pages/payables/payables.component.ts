@@ -4,6 +4,7 @@ import {User} from './../../models/user.mode';
 import {UserService} from './../../services/user.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
+import { CurrencyPipe,DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-payables',
@@ -104,9 +105,10 @@ export class PayablesComponent implements OnInit {
     this.columns = [
       { name: 'Invoice Ref Id',prop:'invoiceRefId' },
       { name: 'PO Number',prop:'poNumber'  },
-      { name: 'Invoice Date' ,prop:'inventorySubDateTime' },
-      { name: 'Due Date',prop:'inventoryDueDateTime'  },
+      { name: 'Invoice Date' ,prop:'inventorySubDateTime',pipe: new DatePipe('en-US') },
+      { name: 'Due Date',prop:'inventoryDueDateTime',pipe: new DatePipe('en-US')  },
       { name: 'Merchant ID' ,prop:'sellerUserId' },
+      { name: 'Amount' ,prop:'totalAmount',pipe: new CurrencyPipe('en-US') },
       { name: 'Action', cellTemplate: this.viewInvoice  }
     ];
   }

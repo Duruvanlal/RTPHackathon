@@ -1,17 +1,17 @@
 <div class="row">
 
-        <div class="col-md-4">
+        <div class="col-md-6">
                 <mat-card>
-                    <mat-card-title class="text-secondary">GENERATE UPA CODE 
+                    <mat-card-title class="text-secondary">REGISTER UPA
                         <div>
                             <button type="button" (click)="generateUPA()" class="btn btn-primary">
-                                Create </button>
+                                Register </button>
                         </div>
                     </mat-card-title>
                 </mat-card>
             </div>
             
-    <div class="col-md-4">
+   <!-- <div class="col-md-4">
         <mat-card>
             <mat-card-title class="text-secondary"> REGISTER ACCOUNTS
                 <div>
@@ -20,11 +20,11 @@
                 </div>
             </mat-card-title>
         </mat-card>
-    </div>
+    </div> -->
 
-    <div class="col-md-4">
+    <div class="col-md-6">
         <mat-card>
-            <mat-card-title class="text-secondary"> YODLEE ACCOUNTS 
+            <mat-card-title class="text-secondary"> LINK ACCOUNTS 
                 <!-- <div id="container-fastlink">
                             <div>
                                 <input type="submit" id="btn-fastlink" class="btn btn-primary" value="Link Account">
@@ -33,7 +33,7 @@
                         </div> -->
                 <div>
                     <button type="button" id="btn-fastlink" class="btn btn-primary" data-toggle="modal" data-target="#itMyModal">
-                        Link Account</button>
+                        Link</button>
                 </div>
             </mat-card-title>
         </mat-card>
@@ -45,7 +45,7 @@
 </div>
 <!-- style="text-align: center;"-->
 <mat-card class="mt-3">
-    <mat-card-title class="text-secondary"> Chart of Accounts</mat-card-title>
+    <mat-card-title class="text-secondary"> Bank Account(s)</mat-card-title>
     <div class="input-group mt-3">
         <span class="input-group-prepend">
             <span class="input-group-text">
@@ -59,6 +59,12 @@
     <ngx-datatable class="material mt-2" [rows]="rows" [loadingIndicator]="loadingIndicator" [columns]="columns" [columnMode]="'force'"
         [limit]="10" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [reorderable]="reorderable">
     </ngx-datatable>
+
+    <ng-template #accountBalance let-row="row" let-value="value">
+        <i (click)="viewAcctBalance(row)"
+        class="fa fa-money text-primary cursor-pointer"> View Balance </i>
+    </ng-template>
+
     <ng-template #editpayment let-row="row" let-value="value">
         <i *ngIf="!isValidString(row.upaCD)" (click)="action(row)"
         class="fa fa-plus text-primary cursor-pointer"> Link UPA </i>
@@ -179,6 +185,31 @@
   </div>
 </div>
 
+<div bsModal #showAccBalanceModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1"
+  [config]="{backdrop: true, keyboard: false,ignoreBackdropClick:true}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header" style="display: block;">
+        <h4 id="dialog-sizes-name1" class="modal-title pull-left">Account Balance</h4>
+        <button type="button" class="close pull-right" (click)="showAccBalanceModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+                <table class="table table-striped">          
+                        <tr>
+                          <th> Current Balance </th>
+                          <th> Available Balance </th>
+                        </tr>
+                        <tr>
+                                 <td>{{selectedAccountBalance.demandDepositAccountDTO.currentBalance.amount | currency:'USD'}}</td>
+                                 <td> {{selectedAccountBalance.demandDepositAccountDTO.availableBalance.amount | currency:'USD'}} </td>
+                               </tr>       
+                    </table>
+      </div>
+    </div>
+  </div>
+</div>
 <!--Don't delete this-->
 
 <input type="text" id="token" style="visibility: hidden">

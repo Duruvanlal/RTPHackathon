@@ -44,7 +44,7 @@
                        <td>{{row.productName}}</td>
                        <td> {{row.productQty}} </td>
                        <td> {{row.unitPrice}} </td>
-                       <td> {{row.totalAmount}} </td>
+                       <td> {{row.totalAmount | currency:'USD'}} </td>
                      </tr>       
           </table>
         <div class="row">
