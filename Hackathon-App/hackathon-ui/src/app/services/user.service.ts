@@ -2,7 +2,7 @@ import { Injectable, Renderer2 } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { GlobalProperty } from '../../global';
 import { User,Token,UserPmtAccount,UPAMaster,InvoiceCustomer } from './../models/user.mode';
-import {InvoiceMaster,InvoiceDetail} from './../models/invoice.mode';
+import {InvoiceMaster,InvoiceDetail, AccountBalance} from './../models/invoice.mode';
 import { Subject, BehaviorSubject, Observable, of, concat } from 'rxjs';
 import { Router } from '@angular/router';
 
@@ -77,6 +77,10 @@ export class UserService {
 
   public postRfpReq(data) {
     return this.http.post(this.global.zillPayUrl + "zill/transactions/rfp-response", data);
+  }
+
+  public getAccountBalance(accountNumber): Observable<AccountBalance> {
+    return this.http.get<AccountBalance>(this.global.zillPayUrl + "zill/transactions/balance/"+accountNumber);
   }
 
   public refresh() {

@@ -4,6 +4,7 @@ import {UserService} from './../../services/user.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import {InvoiceMaster, InvoiceDetail} from './../../models/invoice.mode';
 import { Router } from '@angular/router';
+import { CurrencyPipe,DatePipe } from '@angular/common';
 
 
 @Component({
@@ -64,9 +65,10 @@ export class ReceivablesComponent implements OnInit {
     this.columns = [
       { name: 'Invoice Ref Id',prop:'invoiceRefId' },
       { name: 'PO Number',prop:'poNumber'  },
-      { name: 'Invoice Date' ,prop:'inventorySubDateTime' },
-      { name: 'Due Date',prop:'inventoryDueDateTime'  },
+      { name: 'Invoice Date' ,prop:'inventorySubDateTime',pipe: new DatePipe('en-US') },
+      { name: 'Due Date',prop:'inventoryDueDateTime',pipe: new DatePipe('en-US')  },
       { name: 'Cust Id' ,prop:'buyerUserId' },
+      { name: 'Amount' ,prop:'totalAmount',pipe: new CurrencyPipe('en-US') },
       { name: 'Action', cellTemplate: this.viewInvoice  }
     ];
   }
