@@ -51,11 +51,21 @@ export class PayablesComponent implements OnInit {
   invoiceDetail :InvoiceDetail;
   invoiceRefId:any;
 
+  isEligibleForAction = false;
   action(row){
     this.viewInvoiceModal.show();
     this.invoiceDetail = row.invoiceDetail;
     this.invoiceRefId=row.invoiceRefId;
     console.log('invoiceDetail '+JSON.stringify(this.invoiceDetail));
+    this.userService.isEligibleForAction(row.invoiceRefId).subscribe(
+      res =>{
+          if(res){
+            this.isEligibleForAction = true;
+          }
+      },error =>{
+
+      }
+    );
   }
   reasonForAction = '';
   approveInvoice() {

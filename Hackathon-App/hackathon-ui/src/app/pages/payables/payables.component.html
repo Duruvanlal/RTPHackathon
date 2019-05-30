@@ -47,7 +47,8 @@
                        <td> {{row.totalAmount | currency:'USD'}} </td>
                      </tr>       
           </table>
-        <div class="row">
+          <h4 class="text-danger "*ngIf="!isEligibleForAction"> It is not eligible for approve / reject</h4>
+        <div class="row" *ngIf="isEligibleForAction">
             <div class="col-md-4">
                 <mat-form-field>
                     <input placeholder="Reason" name="reason" type="text" matInput [(ngModel)]="reasonForAction"> 

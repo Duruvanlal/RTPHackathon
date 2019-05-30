@@ -83,6 +83,10 @@ export class UserService {
     return this.http.get<AccountBalance>(this.global.zillPayUrl + "zill/transactions/balance/"+accountNumber);
   }
 
+  public isEligibleForAction(invoiceMasterId) : Observable<Boolean> {
+    return this.http.get<Boolean>(this.global.zillPayUrl + "zill/transactions/rfp-approve-eligible/"+invoiceMasterId);
+  }
+
   public refresh() {
     this.router.routeReuseStrategy.shouldReuseRoute = function () { return false; };
     let currentUrl = this.router.url + '?';
