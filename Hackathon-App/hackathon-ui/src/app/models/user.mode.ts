@@ -70,6 +70,8 @@ export class InvoiceCustomer{
     id : any;
     userId : any;
     upaCd : any;
+    firstName = '';
+    lastName = '';
 }
 
 export class Token{

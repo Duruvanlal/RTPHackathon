@@ -68,7 +68,8 @@
     <ng-template #editpayment let-row="row" let-value="value">
         <i *ngIf="!isValidString(row.upaCD)" (click)="action(row)"
         class="fa fa-plus text-primary cursor-pointer"> Link UPA </i>
-        <i *ngIf="isValidString(row.upaCD)" class="text-primary cursor-pointer">{{row.upaCD}} </i>
+        <i *ngIf="isValidString(row.upaCD)" (click)="action(row)"
+        class="fa fa-pencil-square-o text-primary cursor-pointer">{{row.upaCD}} </i>
     </ng-template>
 </mat-card>
 
