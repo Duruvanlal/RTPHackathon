@@ -48,17 +48,19 @@ export class PayablesComponent implements OnInit {
   }
 
   invoiceDetail :InvoiceDetail;
+  invoiceRefId:any;
 
   action(row){
     this.viewInvoiceModal.show();
     this.invoiceDetail = row.invoiceDetail;
+    this.invoiceRefId=row.invoiceRefId;
     console.log('invoiceDetail '+JSON.stringify(this.invoiceDetail));
   }
   reasonForAction = '';
   approveInvoice() {
     let rfpRequest = new RfpRequest();
     rfpRequest.action = 'APPROVE';
-    rfpRequest.referenceId= this.invoiceDetail.invoiceRefId;
+    rfpRequest.referenceId= this.invoiceRefId;
     rfpRequest.rejectReason = this.reasonForAction
 
     this.userService.postRfpReq(rfpRequest).subscribe(
@@ -78,7 +80,7 @@ export class PayablesComponent implements OnInit {
 
         let rfpRequest = new RfpRequest();
         rfpRequest.action = 'REJECT';
-        rfpRequest.referenceId= this.invoiceDetail.invoiceRefId;
+        rfpRequest.referenceId= this.invoiceRefId;
         rfpRequest.rejectReason = this.reasonForAction;
 
         this.userService.postRfpReq(rfpRequest).subscribe(
