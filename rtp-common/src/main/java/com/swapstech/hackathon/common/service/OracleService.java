@@ -97,7 +97,7 @@ public class OracleService {
 			creditAccount.setValue(requestorAccount.getAccountNumber());
 			User creditor = userAcctService.findByUserId(requestorAccount.getUserId());
 			if (creditor != null) {
-				rfpDto.setCreditorName(creditor.getUserName());
+				rfpDto.setCreditorName(creditor.getFirstName() +" "+creditor.getLastName());
 				
 				userId = creditor.getUserId();
 				pwd = creditor.getPassword();
@@ -111,7 +111,7 @@ public class OracleService {
 			rfpDto.setDebitAccountId(approverAccount.getAccountNumber());
 			User payer = userAcctService.findByUserId(approverAccount.getUserId());
 			if (payer != null) {
-				rfpDto.setDebtorName(payer.getUserName());
+				rfpDto.setDebtorName(payer.getFirstName() + " "+ payer.getLastName());
 				rfpDto.setAgentMemId(payer.getAgentMemberId());
 			}
 		}
@@ -193,7 +193,7 @@ public class OracleService {
 			creditAccount.setValue(requestorAccount.getAccountNumber());
 			User creditor = userAcctService.findByUserId(requestorAccount.getUserId());
 			if (creditor != null) {
-				rfpDto.setCreditorName(creditor.getUserName());
+				rfpDto.setCreditorName(creditor.getFirstName() + " "+ creditor.getLastName());
 
 			}
 		}
@@ -205,7 +205,7 @@ public class OracleService {
 			rfpDto.setDebitAccountId(approverAccount.getAccountNumber());
 			User payer = userAcctService.findByUserId(approverAccount.getUserId());
 			if (payer != null) {
-				rfpDto.setDebtorName(payer.getUserName());
+				rfpDto.setDebtorName(payer.getFirstName() + " "+ payer.getLastName());
 				rfpDto.setAgentMemId(payer.getAgentMemberId());
 				userId = payer.getUserId();
 				pwd = payer.getPassword();
@@ -257,7 +257,7 @@ public class OracleService {
 			creditAccount.setValue(requestorAccount.getAccountNumber());
 			User creditor = userAcctService.findByUserId(requestorAccount.getUserId());
 			if (creditor != null) {
-				rfpDto.setCreditorName(creditor.getUserName());
+				rfpDto.setCreditorName(creditor.getFirstName() + " "+ creditor.getLastName());
 
 			}
 		}
@@ -269,7 +269,7 @@ public class OracleService {
 			rfpDto.setDebitAccountId(approverAccount.getAccountNumber());
 			User payer = userAcctService.findByUserId(approverAccount.getUserId());
 			if (payer != null) {
-				rfpDto.setDebtorName(payer.getUserName());
+				rfpDto.setDebtorName(payer.getFirstName() + " "+ payer.getLastName());
 				rfpDto.setAgentMemId(payer.getAgentMemberId());
 				userId = payer.getUserId();
 				pwd = payer.getPassword();
