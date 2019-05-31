@@ -28,6 +28,7 @@ import org.jose4j.jws.JsonWebSignature;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.NumericDate;
 import org.jose4j.lang.JoseException;
+import org.springframework.core.io.ClassPathResource;
 
 public class JWT {
 
@@ -80,7 +81,7 @@ public class JWT {
     }
 
     
-    public String readPrivKey(String fileName) {
+    public String readPrivKey(String fileName){
 
     	StringBuilder result = new StringBuilder("");
 
@@ -88,8 +89,9 @@ public class JWT {
     	ClassLoader classLoader = getClass().getClassLoader();
     	File file = new File(classLoader.getResource(fileName).getFile());
 
-    	try (Scanner scanner = new Scanner(file)) {
-
+    	try {
+    		File resource = new ClassPathResource(fileName).getFile();
+    		Scanner scanner = new Scanner(resource);
     		while (scanner.hasNextLine()) {
     			String line = scanner.nextLine();
     			if((!line.contains("BEGIN")) && (!line.contains("END"))) {
