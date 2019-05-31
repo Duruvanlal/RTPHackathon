@@ -20,6 +20,7 @@ export class ReceivablesComponent implements OnInit {
   currentUser : User;
 
   @ViewChild('viewInvoice')  viewInvoice: TemplateRef<any>;
+  @ViewChild('company')  company: TemplateRef<any>;
   @ViewChild('viewInvoiceModal') viewInvoiceModal: ModalDirective;
 
   rows= [];
@@ -67,10 +68,32 @@ export class ReceivablesComponent implements OnInit {
       { name: 'PO Number',prop:'poNumber'  },
       { name: 'Invoice Date' ,prop:'inventorySubDateTime',pipe: new DatePipe('en-US') },
       { name: 'Due Date',prop:'inventoryDueDateTime',pipe: new DatePipe('en-US')  },
-      { name: 'Cust Id' ,prop:'buyerUserId' },
       { name: 'Amount' ,prop:'totalAmount',pipe: new CurrencyPipe('en-US') },
+      { name: 'Customer' ,cellTemplate: this.company  },
+      { name: 'Status' ,prop:'status'  },
       { name: 'Action', cellTemplate: this.viewInvoice  }
     ];
   }
+
+  isUserRonnie(){
+    if(this.currentUser.userName=='RonnieT'){
+      return true;
+    }
+    return false;
+}
+
+isUserAnthony(){
+  if(this.currentUser.userName=='AnthonyT'){
+    return true;
+  }
+  return false;
+}
+
+isExternalUser(){
+  if(this.currentUser.userName!='AnthonyT' && this.currentUser.userName!='RonnieT'){
+    return true;
+  }
+  return false;
+}
 
 }

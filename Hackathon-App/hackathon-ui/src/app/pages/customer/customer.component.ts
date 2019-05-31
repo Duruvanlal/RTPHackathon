@@ -26,10 +26,12 @@ export class CustomerComponent implements OnInit {
         for(let cust of this.invoiceCustomerList){
           if(cust.userId=='RonnieT'){
             cust.firstName='Anthony';
-            cust.lastName='Turner'
+            cust.lastName='Turner';
+            cust.company = 'Swapstech';
           }else if(cust.userId=='AnthonyT'){
             cust.firstName='Ronnie';
-            cust.lastName='Tepper'
+            cust.lastName='Tepper';
+            cust.company='Oracle';
           }
         }
         this.temp = [... this.invoiceCustomerList];
@@ -62,10 +64,10 @@ export class CustomerComponent implements OnInit {
   ngOnInit() {
 
     this.columns = [
-      { name: 'Id',prop:'id' },
       { name: 'First Name',prop:'firstName'  },
       { name: 'Last Name',prop:'lastName'  },
-      { name: 'Upa Code' ,prop:'upaCd' }
+      { name: 'Company',prop:'company'  },
+      { name: 'UPA' ,prop:'upaCd' }
     ];
   }
 

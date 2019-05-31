@@ -72,6 +72,7 @@ export class InvoiceCustomer{
     upaCd : any;
     firstName = '';
     lastName = '';
+    company = '';
 }
 
 export class Token{
