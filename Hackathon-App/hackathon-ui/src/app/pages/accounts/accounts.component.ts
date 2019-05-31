@@ -130,8 +130,7 @@ export class AccountsComponent implements OnInit, AfterViewInit {
   ngOnInit() {
 
     this.columns = [
-      { name: 'Account Name', prop: 'accountName' },
-      { name: 'Short Name', prop: 'shortName' },
+      { name: 'Account Name', prop: 'shortName' },
       { name: 'Account Type', prop: 'accountType' },
       { name: 'Account Number', prop: 'accountNumber' },
       { name: 'Routing Number', prop: 'routingNumber' },
