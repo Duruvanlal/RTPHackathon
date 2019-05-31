@@ -417,6 +417,10 @@ public class OracleService {
 		String instructionId = getInstructionId(transaction.getRtpTransId(), token);
 		LOGGER.info("checkRfpStatus Response:::{}", instructionId);
 		ZillTransactionDetails txnDetails=transDetailsService.getZillTransactionDetailByTransCd(transaction.getPaymentTransCode());
+		if (StringUtils.isNotBlank(txnDetails.getTransStatus()) && ZillTransactionStatus.PENDING_APPROVAL.name().equalsIgnoreCase(txnDetails.getTransStatus())) {
+			isRfpTransmitted = true;			
+		}
+		
 		if (StringUtils.isNotBlank(instructionId) && null !=txnDetails && StringUtils.isNotBlank(txnDetails.getTransStatus())) {
 			if (StringUtils.isNotBlank(instructionId) && ZillTransactionStatus.BANK_REVIEW.name().equalsIgnoreCase(txnDetails.getTransStatus())) {
 				isRfpTransmitted = true;
