@@ -11,6 +11,8 @@ public interface UserPmtActRepository extends JpaRepository<UserPaymentAccount, 
 	
 	public UserPaymentAccount findOneByUserIdAndAccountType(String userId,String accountType);
 	
+	public UserPaymentAccount findOneByUserIdAndBankName(String userId,String bankName);
+	
 	public List<UserPaymentAccount> findByUserId(String userId);
 	
 	public List<UserPaymentAccount> findByUserIdNotIn(String userId);
