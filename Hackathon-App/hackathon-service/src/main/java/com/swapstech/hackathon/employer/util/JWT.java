@@ -11,6 +11,7 @@ package com.swapstech.hackathon.employer.util;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -90,7 +91,7 @@ public class JWT {
     	File file = new File(classLoader.getResource(fileName).getFile());
 
     	try {
-    		File resource = new ClassPathResource(fileName).getFile();
+    		InputStream resource = new ClassPathResource(fileName).getInputStream();
     		Scanner scanner = new Scanner(resource);
     		while (scanner.hasNextLine()) {
     			String line = scanner.nextLine();
