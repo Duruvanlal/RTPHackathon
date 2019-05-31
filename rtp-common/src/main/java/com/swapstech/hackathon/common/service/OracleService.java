@@ -42,6 +42,7 @@ import com.swapstech.hackathon.common.model.ZillTransactionStatus;
 import com.swapstech.hackathon.common.repository.UserAcctUpaMappingRepository;
 import com.swapstech.hackathon.common.repository.UserPymtAcctRepository;
 import com.swapstech.hackathon.common.repository.UserUpaMasterRepository;
+import com.swapstech.hackathon.common.repository.ZillTransactionRepository;
 import com.swapstech.hackathon.common.repository.util.ApiUrlConstants;
 
 /**
@@ -62,6 +63,8 @@ public class OracleService {
 	UserAcctUpaMappingRepository userAcctUpaMappingRepository;
 	@Autowired
 	UserPymtAcctRepository userPymtAcctRepository;
+	@Autowired 
+	ZillTransactionRepository zillTransactionRepository;
 	public static final String AUTH = "Authorization";
 	public static final String BASIC = "Basic MmQ3OWU5MzllMDQyYXBpYWNjZXNzOGU1ZmFiNDM2ZmI1NTgxOndlbGNvbWUx";
 	public static final String BEARER = "Bearer ";
@@ -415,10 +418,55 @@ public class OracleService {
 		LOGGER.info("checkRfpStatus Response:::{}", instructionId);
 		ZillTransactionDetails txnDetails=transDetailsService.getZillTransactionDetailByTransCd(transaction.getPaymentTransCode());
 		if (StringUtils.isNotBlank(instructionId) && null !=txnDetails && StringUtils.isNotBlank(txnDetails.getTransStatus())) {
-			if (StringUtils.isNotBlank(instructionId) && ZillTransactionStatus.TRANSMITTED.name().equalsIgnoreCase(txnDetails.getTransStatus())) {
+			if (StringUtils.isNotBlank(instructionId) && ZillTransactionStatus.BANK_REVIEW.name().equalsIgnoreCase(txnDetails.getTransStatus())) {
 				isRfpTransmitted = true;
+				txnDetails.setTransStatus(ZillTransactionStatus.PENDING_APPROVAL.name());
+				transDetailsService.updateZillTransactionDetails(txnDetails);
 			}
 		}
 		return isRfpTransmitted;
+	}
+	
+	public void listenNotifications(List<ZillTransaction> zillTxnList,String userId) {		
+		String token = getToken(userId, "Welcome@1");
+		String url = ApiUrlConstants.RTP_ALERTS_URL;
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.add(AUTH, BEARER + token);
+
+		RestTemplate restTemplate = new RestTemplate();
+		HttpEntity request = new HttpEntity(headers);
+		AlertList alerts = new AlertList();
+		ResponseEntity<AlertList> response = restTemplate.exchange(url, HttpMethod.GET, request, AlertList.class);		
+		if (response != null && response.getBody() != null) {
+			if (StringUtils.isNotBlank(response.getBody().getStatus().getResult())
+					&& "SUCCESSFUL".equalsIgnoreCase(response.getBody().getStatus().getResult())) {
+				List<AlertDTO> alertsList = response.getBody().getAlertDTOs();
+				for (AlertDTO alertDTO : alertsList) {
+					String alertMsg = alertDTO.getMessageBody();
+					//LOGGER.info("Alert Messages:{}", alertMsg);
+					for (ZillTransaction zillTransaction : zillTxnList) {
+					//	LOGGER.info("Listener Notifications Response:::{}", zillTransaction.getRtpTransId());
+						String instructionId = null;
+						if (StringUtils.isNotBlank(alertMsg) && alertMsg.contains("MoneyRequested") && StringUtils.isNotBlank(zillTransaction.getRtpTransId())
+								&& alertMsg.contains(zillTransaction.getRtpTransId()) ) {
+							String[] strArr = alertMsg.split("Instruction_Id");
+							instructionId = strArr[1].split(",")[0].replaceAll("&#x3a;", "");
+							LOGGER.info("Instruction ID:{}", instructionId);
+							zillTransaction.setInstructionId(instructionId);
+							zillTransactionRepository.save(zillTransaction);
+							ZillTransactionDetails txnDetails=transDetailsService.getZillTransactionDetailByTransCd(zillTransaction.getPaymentTransCode());
+							if (StringUtils.isNotBlank(instructionId) && null !=txnDetails && StringUtils.isNotBlank(txnDetails.getTransStatus())) {
+								if (StringUtils.isNotBlank(instructionId) && ZillTransactionStatus.BANK_REVIEW.name().equalsIgnoreCase(txnDetails.getTransStatus())) {				
+									txnDetails.setTransStatus(ZillTransactionStatus.PENDING_APPROVAL.name());
+									transDetailsService.updateZillTransactionDetails(txnDetails);
+								}
+							}	
+
+						}
+					}
+				}
+			}
+		}	
 	}
 }

@@ -3,6 +3,8 @@
  */
 package com.swapstech.hackathon.common.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,4 +19,6 @@ public interface ZillTransactionRepository extends JpaRepository<ZillTransaction
 	public ZillTransaction findByPaymentTransCode(String paymentTransCode);
 	
 	public ZillTransaction findByPaymentReasonRefId(String paymentReasonRefId);
+	
+	public List<ZillTransaction> findByInstructionIdIsNull();
 }
