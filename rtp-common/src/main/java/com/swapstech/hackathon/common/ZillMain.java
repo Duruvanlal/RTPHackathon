@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * @author Duruvanlal TJ
@@ -14,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
  */
 
 @SpringBootApplication
-
+@EnableScheduling
 public class ZillMain {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ZillMain.class);

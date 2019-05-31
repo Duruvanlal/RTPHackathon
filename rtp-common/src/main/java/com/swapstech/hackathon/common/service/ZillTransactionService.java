@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Random;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.swapstech.hackathon.common.model.AccountActivity;
 import com.swapstech.hackathon.common.model.AccountBalance;
 import com.swapstech.hackathon.common.model.RfpAction;
 import com.swapstech.hackathon.common.model.RfpResponseEnum;
@@ -21,6 +21,7 @@ import com.swapstech.hackathon.common.model.ZillTransaction;
 import com.swapstech.hackathon.common.model.ZillTransactionDetails;
 import com.swapstech.hackathon.common.model.ZillTransactionStatus;
 import com.swapstech.hackathon.common.repository.ZillTransactionRepository;
+import org.springframework.scheduling.annotation.Scheduled;
 
 /**
  * @author Duruvanlal TJ
@@ -28,6 +29,7 @@ import com.swapstech.hackathon.common.repository.ZillTransactionRepository;
  */
 @Service
 public class ZillTransactionService {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ZillTransactionService.class);
 	@Autowired
 	ZillTransactionRepository repository;
 	@Autowired
@@ -67,7 +69,7 @@ public class ZillTransactionService {
         LocalDateTime formatDateTime = LocalDateTime.parse(rfpTxn.getValueDate(), formatter);
 		newZillTransaction.setCreatedDt(formatDateTime);
 		newZillTransaction=updateZillTransaction(newZillTransaction);
-		txnDetails.setTransStatus(ZillTransactionStatus.TRANSMITTED.name());
+		txnDetails.setTransStatus(ZillTransactionStatus.BANK_REVIEW.name());
 		detailsRepository.updateZillTransactionDetails(txnDetails);
 		return newZillTransaction;
 	}
@@ -119,4 +121,19 @@ public class ZillTransactionService {
 		}
 		return isRfpTransmitted;
 	}
+	@Scheduled(fixedDelay=30000)
+	public void listenNotification() {		
+		List<ZillTransaction> zillTxnList=repository.findByInstructionIdIsNull();
+		if (zillTxnList !=null && !zillTxnList.isEmpty()) {
+			LOGGER.info("Zill Payments with Instuction Id as Null- txn Size is:{}",zillTxnList.size());
+			oracleService.listenNotifications(zillTxnList,"AnthonyT");
+			oracleService.listenNotifications(zillTxnList,"RonnieT");			
+		}
+		else {
+			LOGGER.info("No Zill Payments with Instuction Id as Null");
+		}
+		
+	}
+
+	
 }

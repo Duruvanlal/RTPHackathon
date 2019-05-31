@@ -8,5 +8,5 @@ package com.swapstech.hackathon.common.model;
  *
  */
 public enum ZillTransactionStatus {
-SUBMITTED,TRANSMITTED,APPROVED,REJECTED
+SUBMITTED,BANK_REVIEW,PENDING_APPROVAL,APPROVED,REJECTED
 }
