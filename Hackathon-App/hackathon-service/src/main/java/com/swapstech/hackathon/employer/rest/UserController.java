@@ -135,7 +135,7 @@ public class UserController {
 			
 			if(userPmtAct.size() > 0) {
 				for(UserPaymentAccount acct :userPmtAct) {
-					UserPaymentAccount isExists = userPmtActRepository.findOneByUserIdAndAccountType(acct.getUserId(), acct.getAccountType());
+					UserPaymentAccount isExists = userPmtActRepository.findOneByUserIdAndBankName(acct.getUserId(), acct.getBankName());
 					if(!(isExists!=null)) {
 						acct.setUserPmtActId(acct.getUserId()+"_"+acct.getAccountNumber());
 						acct = userPmtActRepository.save(acct);

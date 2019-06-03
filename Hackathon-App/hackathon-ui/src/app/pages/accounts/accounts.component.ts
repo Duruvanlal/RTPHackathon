@@ -76,17 +76,22 @@ export class AccountsComponent implements OnInit, AfterViewInit {
 
         let yodleeRows : any;
         yodleeRows = data.account;
-
+        this.userPmtAct = [];
         for (let row of yodleeRows) {
           if (row.accountName == this.currentUser.userName) {
             let userPmtAccount = new UserPmtAccount();
 
-            userPmtAccount.accountType = row.accountType;
-            userPmtAccount.shortName = row.accountName;
+            userPmtAccount.accountType = "DDA_Checking";
+            userPmtAccount.shortName = row.accountName+" Checking";
             userPmtAccount.accountName = row.accountName;
             userPmtAccount.bankName = row.providerName;
             userPmtAccount.userId = row.accountName;
             userPmtAccount.accountNumber = row.accountNumber;
+            if(this.currentUser.userName=="RonnieT"){
+              userPmtAccount.accountNumber = "CIBTEAM100002";
+            }else if(this.currentUser.userName=="AnthonyT"){
+              userPmtAccount.accountNumber = "NYCTEAM100002";
+            }
             userPmtAccount.routingNumber = '026009593';
 
             this.userPmtAct.push(userPmtAccount);
@@ -103,7 +108,7 @@ export class AccountsComponent implements OnInit, AfterViewInit {
           });
           }, (error) => {
             this.spinner.hide();
-         //   this.toastrService.error('Error in linking the accounts');
+            this.toastrService.success('Accounts successfully Linked to Zillpay');
           }
         );
 
@@ -130,8 +135,7 @@ export class AccountsComponent implements OnInit, AfterViewInit {
   ngOnInit() {
 
     this.columns = [
-      { name: 'Account Name', prop: 'accountName' },
-      { name: 'Short Name', prop: 'shortName' },
+      { name: 'Account Name', prop: 'shortName' },
       { name: 'Account Type', prop: 'accountType' },
       { name: 'Account Number', prop: 'accountNumber' },
       { name: 'Routing Number', prop: 'routingNumber' },

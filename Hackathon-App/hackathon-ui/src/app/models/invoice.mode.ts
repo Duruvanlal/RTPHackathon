@@ -12,6 +12,8 @@ export class InvoiceMaster{
     inventorySubDateTime : any;
     createdBy : any;
     createdDateTime : any;
+    company : any;
+    status:any;
     invoiceDetail : InvoiceDetail[];
 }
 

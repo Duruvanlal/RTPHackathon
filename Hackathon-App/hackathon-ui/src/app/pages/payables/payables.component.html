@@ -7,13 +7,18 @@
             </span>
         </span>
         <input class="form-control" type="text" (keyup)="updateFilter($event)" 
-        placeholder="Search Invoice Ref / Merchant ID" />
+        placeholder="Search Invoice Ref" />
 
     </div>
     <ngx-datatable class="material mt-2" [rows]="rows" 
     [columns]="columns" [columnMode]="'force'"  [limit]="10"
         [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'">
     </ngx-datatable>
+    <ng-template #company let-row="row" let-value="value">
+            <i *ngIf="isUserRonnie()">Swapstech</i>
+            <i *ngIf="isUserAnthony()"> Oracle</i>
+            <i *ngIf="isExternalUser()"> Swapstech India</i>
+        </ng-template>
     <ng-template #viewInvoice let-row="row" let-value="value">
         <i class="fa fa-pencil fa-lg text-primary cursor-pointer" (click)="action(row)"></i>
     </ng-template>
@@ -47,7 +52,10 @@
                        <td> {{row.totalAmount | currency:'USD'}} </td>
                      </tr>       
           </table>
-        <div class="row">
+          <h5 class="text-danger "*ngIf="!isEligibleForAction"> 
+            This invoice is under bank review. Please check back later.
+          </h5>
+        <div class="row" *ngIf="isEligibleForAction">
             <div class="col-md-4">
                 <mat-form-field>
                     <input placeholder="Reason" name="reason" type="text" matInput [(ngModel)]="reasonForAction"> 

@@ -74,6 +74,9 @@ public class InvoiceMaster implements Serializable {
 	
 	@Column(name = "CREATED_BY")
 	private String createdBy;
+	
+	@Column(name = "STATUS")
+	private String status;
 
 	@Column(name = "CREATED_DT")
 	@Convert(converter = LocalDateTimeAttributeConverter.class)
@@ -180,6 +183,14 @@ public class InvoiceMaster implements Serializable {
 
 	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public LocalDateTime getCreatedDateTime() {

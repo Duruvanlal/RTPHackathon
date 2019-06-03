@@ -23,6 +23,17 @@ export class CustomerComponent implements OnInit {
     this.userService.getInvoiceCustomers(this.currentUser.userName).subscribe(
       res =>{
         this.invoiceCustomerList = res;
+        for(let cust of this.invoiceCustomerList){
+          if(cust.userId=='RonnieT'){
+            cust.firstName='Anthony';
+            cust.lastName='Turner';
+            cust.company = 'Swapstech';
+          }else if(cust.userId=='AnthonyT'){
+            cust.firstName='Ronnie';
+            cust.lastName='Tepper';
+            cust.company='Oracle';
+          }
+        }
         this.temp = [... this.invoiceCustomerList];
         this.rows =  this.invoiceCustomerList;
       }, error => {
@@ -53,9 +64,10 @@ export class CustomerComponent implements OnInit {
   ngOnInit() {
 
     this.columns = [
-      { name: 'Id',prop:'id' },
-      { name: 'User Id',prop:'userId'  },
-      { name: 'Upa Code' ,prop:'upaCd' }
+      { name: 'First Name',prop:'firstName'  },
+      { name: 'Last Name',prop:'lastName'  },
+      { name: 'Company',prop:'company'  },
+      { name: 'UPA' ,prop:'upaCd' }
     ];
   }
 

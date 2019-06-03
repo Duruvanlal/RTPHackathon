@@ -40,7 +40,7 @@
 
 
   <div class="row mt-2">
-    <div class="col-md-5 ml-5">
+    <div class="col-md-4">
       <mat-form-field>
         <input required (dateInput)="calculateDueDate()" [(ngModel)]="invoiceMaster.inventoryDueDateTime" matInput [matDatepicker]="picker"
           placeholder="Due Date">
@@ -48,9 +48,17 @@
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
     </div>
-    <div class="col-md-5 offset-md-1">
+    <div class="col-md-4">
       <mat-form-field>
         <input required [(ngModel)]="invoiceMaster.poNumber" matInput placeholder="PO Number">
+      </mat-form-field>
+    </div>
+    <div class="col-md-4">
+      <mat-form-field>
+        <mat-label>Invoice Template</mat-label>
+        <mat-select>
+          <mat-option value="inv_template_2019_1">inv_template_2019_1</mat-option>
+        </mat-select>
       </mat-form-field>
     </div>
   </div>

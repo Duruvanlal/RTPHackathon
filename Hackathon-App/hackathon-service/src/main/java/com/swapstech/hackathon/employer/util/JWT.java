@@ -11,6 +11,7 @@ package com.swapstech.hackathon.employer.util;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -28,6 +29,7 @@ import org.jose4j.jws.JsonWebSignature;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.NumericDate;
 import org.jose4j.lang.JoseException;
+import org.springframework.core.io.ClassPathResource;
 
 public class JWT {
 
@@ -80,7 +82,7 @@ public class JWT {
     }
 
     
-    public String readPrivKey(String fileName) {
+    public String readPrivKey(String fileName){
 
     	StringBuilder result = new StringBuilder("");
 
@@ -88,8 +90,9 @@ public class JWT {
     	ClassLoader classLoader = getClass().getClassLoader();
     	File file = new File(classLoader.getResource(fileName).getFile());
 
-    	try (Scanner scanner = new Scanner(file)) {
-
+    	try {
+    		InputStream resource = new ClassPathResource(fileName).getInputStream();
+    		Scanner scanner = new Scanner(resource);
     		while (scanner.hasNextLine()) {
     			String line = scanner.nextLine();
     			if((!line.contains("BEGIN")) && (!line.contains("END"))) {
